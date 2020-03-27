@@ -10,23 +10,17 @@ public class Node implements Comparable<Node>{
 
     @Override
     public int compareTo(Node o) {
-        // o == this
-        if(this.equals(o)) {
-            return 0;
-        }
-        // o > this
-        else if(label < o.label){
-            return 1;
-        }
-        // o < this
-        else {
-            return -1;
-        }
+        return this.label.compareTo(o.label);
     }
 
+    @Override
     public boolean equals(Object obj) {
         if(obj instanceof  Node) {
-            return ((Node) obj).label == this.label;
+            if(((Node) obj).getLabel() == this.label) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return false;
     }
