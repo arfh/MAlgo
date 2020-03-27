@@ -1,5 +1,7 @@
 package ISEMaster;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -7,6 +9,12 @@ import java.util.TreeMap;
 public class Graph {
 
     private TreeMap<Node, ArrayList<Edge>> map = new TreeMap<>();
+
+    public Graph(File f) throws FileNotFoundException{
+        if(f.exists() == false) {
+            throw  new FileNotFoundException("File " + f.getPath() + " not found");
+        }
+    }
 
     public void addEdge(Edge e) {
         // Füge Knoten zur Map hinzu, falls dieser noch nicht existiert.
