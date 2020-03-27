@@ -30,6 +30,18 @@ public class Graph {
         map.get(e.getStart()).add(e);
     }
 
+    public boolean containsNode(Node n) {
+        return map.containsKey(n);
+    }
+
+    public ArrayList<Edge> getEdges(Node n) {
+        if(containsNode(n) == false) {
+            return null;
+        } else {
+            return map.get(n);
+        }
+    }
+
     public String toString() {
         StringBuilder strb = new StringBuilder();
         for (Map.Entry<Node, ArrayList<Edge>> entry: this.map.entrySet()) {
