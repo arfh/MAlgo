@@ -34,4 +34,8 @@ public class Node implements Comparable<Node>{
     public Integer getLabel() {
         return label;
     }
+
+    public String toString() {
+        return "" + label;
+    }
 }

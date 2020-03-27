@@ -29,4 +29,8 @@ public class Edge {
     public Node getStart() {
         return start;
     }
+
+    public String toString() {
+        return "[" + start.toString() + " - " + end.toString() + ", " + costs + "]";
+    }
 }
