@@ -25,6 +25,7 @@ public class Graph {
 
             boolean firstLine = true;
             while((line = br.readLine()) != null){
+                // Initialisieren von allen Knoten in der Map (=> Knoten ohne Kanten würden sonst nicht hinzugefügt werden)
                 if(firstLine == true) {
                     System.out.println(line);
                     Integer x = Integer.parseInt(line);
@@ -33,6 +34,7 @@ public class Graph {
                     }
                     firstLine = false;
                 }
+                // Hinzufügen aller Kanten in den Graphen
                 else if(firstLine == false) {
                     String[] items = line.split("\\t");
                     if(items.length >= 2) {
