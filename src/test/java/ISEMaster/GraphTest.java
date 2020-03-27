@@ -24,26 +24,4 @@ class GraphTest {
             fail(ex.toString());
         }
     }
-
-    @Test
-    void tmp() {
-        TreeSet<Node> set = new TreeSet<>();
-        Node a = new Node(1);
-        Node b = new Node(2);
-
-        assertFalse(set.contains(a));
-        assertFalse(set.contains(b));
-
-        assertTrue(set.add(a));
-
-        assertTrue(set.contains(a));
-        assertFalse(set.contains(b));
-
-        assertTrue(set.add(b));
-
-        assertTrue(set.contains(a));
-        assertTrue(set.contains(b));
-
-        assertFalse(set.add(a));
-    }
 }
