@@ -1,0 +1,4 @@
+filename,nodecount,edgecount
+Graph1.txt,15,17
+Graph2.txt,1000,3000
+Graph3.txt,1000,2501
