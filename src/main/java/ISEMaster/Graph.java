@@ -13,6 +13,12 @@ public class Graph {
 
     private TreeMap<Node, ArrayList<Edge>> map = new TreeMap<>();
 
+    public Graph(ArrayList<Edge> edges) {
+        for (Edge e: edges) {
+            this.addEdge(e);
+        }
+    }
+
     public Graph(File f) throws FileNotFoundException{
         if(f.exists() == false) {
             throw  new FileNotFoundException("File " + f.getPath() + " not found");
@@ -42,6 +48,8 @@ public class Graph {
                         Double costs = 1.0;
                         if(items.length >= 3) {
                             costs = Double.parseDouble(items[2]);
+                        } else {
+                            this.addEdge(new Edge(new Node(n2), new Node(n1), costs));
                         }
                         Edge e = new Edge(new Node(n1), new Node(n2), costs);
                         this.addEdge(e);
@@ -86,6 +94,10 @@ public class Graph {
         } else {
             return map.get(n);
         }
+    }
+
+    public ArrayList<Node> getNodes() {
+        return new ArrayList<>(map.keySet());
     }
 
     public String toString() {

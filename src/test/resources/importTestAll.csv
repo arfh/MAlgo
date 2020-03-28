@@ -1,7 +1,7 @@
 filename,nodecount,edgecount
-Graph1.txt,15,17
-Graph2.txt,1000,3000
-Graph3.txt,1000,2501
-Graph_gross.txt,100000,300000
-Graph_ganzgross.txt,500000,1000000
-Graph_ganzganzgross.txt,1000000,4000000
+Graph1.txt,15,34
+Graph2.txt,1000,6000
+Graph3.txt,1000,5002
+Graph_gross.txt,100000,600000
+Graph_ganzgross.txt,500000,2000000
+Graph_ganzganzgross.txt,1000000,8000000

@@ -17,10 +17,17 @@ public class Edge {
         this.costs = costs;
     }
 
+    public boolean equals(Object o) {
+        if(o instanceof Edge) {
+            return start.equals(((Edge) o).start) && end.equals(((Edge) o).end) && costs.equals(((Edge) o).costs);
+        } else {
+            return false;
+        }
+    }
+
     public Double getCosts() {
         return costs;
     }
-
 
     public Node getEnd() {
         return end;
