@@ -7,6 +7,7 @@
   <groupId>ISEMaster</groupId>
   <artifactId>MAlgo</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <name>MAlgo</name>
   <!-- FIXME change it to the project's website -->
