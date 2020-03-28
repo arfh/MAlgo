@@ -27,7 +27,6 @@ public class Graph {
             while((line = br.readLine()) != null){
                 // Initialisieren von allen Knoten in der Map (=> Knoten ohne Kanten würden sonst nicht hinzugefügt werden)
                 if(firstLine == true) {
-                    System.out.println(line);
                     Integer x = Integer.parseInt(line);
                     for(int i = 0; i < x; i++) {
                         map.put(new Node(i), new ArrayList<Edge>());
@@ -78,24 +77,12 @@ public class Graph {
     }
 
     public Integer countNodes() {
-        TreeSet<Node> nodesVisited = new TreeSet<>();
-        for (Map.Entry<Node, ArrayList<Edge>> entry: this.map.entrySet()) {
-            Node key = entry.getKey();
-            if(nodesVisited.add(key) == true) {
-                nodesVisited.add(key);
-            }
-            for (Edge e: entry.getValue()) {
-                Node tmp = e.getEnd();
-                if(nodesVisited.add(tmp) == true) {
-                }
-            }
-        }
-        return nodesVisited.size();
+        return map.size();
     }
 
     public ArrayList<Edge> getEdges(Node n) {
         if(containsNode(n) == false) {
-            return null;
+            return new ArrayList<>();
         } else {
             return map.get(n);
         }
@@ -103,7 +90,7 @@ public class Graph {
 
     public String toString() {
         StringBuilder strb = new StringBuilder();
-        for (Map.Entry<Node, ArrayList<Edge>> entry: this.map.entrySet()) {
+        for (Map.Entry<Node, ArrayList<Edge>> entry : this.map.entrySet()) {
             strb.append(entry.getKey().toString() + " -> " + entry.getValue().toString());
             strb.append("\n");
         }
