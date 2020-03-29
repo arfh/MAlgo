@@ -2,42 +2,52 @@ package ISEMaster;
 
 public class Edge {
 
-    private Double costs = 1.0;
-    private Node end;
-    private Node start;
+    public static Double DEF_COSTS = 1.0;
+    private Node a;
+    private Node b;
+    private Double costs;
 
-    public Edge(Node start, Node end) {
-        this.start = start;
-        this.end = end;
+    public Edge(Node a, Node b) {
+        this(a, b, DEF_COSTS);
     }
 
-    public Edge(Node start, Node end, Double costs) {
-        this.start = start;
-        this.end = end;
+    public Edge(Node a, Node b, Double costs) {
+        this.a = a;
+        this.b = b;
         this.costs = costs;
     }
 
     public boolean equals(Object o) {
         if(o instanceof Edge) {
-            return start.equals(((Edge) o).start) && end.equals(((Edge) o).end) && costs.equals(((Edge) o).costs);
+            return a.equals(((Edge) o).a) && b.equals(((Edge) o).b) && costs.equals(((Edge) o).costs);
         } else {
             return false;
         }
+    }
+
+    public Node getA() {
+        return a;
+    }
+
+    public Node getB() {
+        return b;
     }
 
     public Double getCosts() {
         return costs;
     }
 
-    public Node getEnd() {
-        return end;
-    }
-
-    public Node getStart() {
-        return start;
+    public Node getTarget(Node n) {
+        if(a.equals(n)) {
+            return b;
+        } else if(b.equals(n)) {
+            return a;
+        } else {
+            return null;
+        }
     }
 
     public String toString() {
-        return "[" + start.toString() + " - " + end.toString() + ", " + costs + "]";
+        return "[" + a.toString() + " - " + b.toString() + ", " + costs + "]";
     }
 }

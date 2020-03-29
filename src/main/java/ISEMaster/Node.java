@@ -1,11 +1,25 @@
 package ISEMaster;
 
+import java.util.TreeMap;
+
 public class Node implements Comparable<Node>{
 
+    private static TreeMap<Integer, Node> nodes = new TreeMap<>();
     private Integer label;
 
     public Node(Integer label) {
         this.label = label;
+    }
+
+    public static Node getNode(int label) {
+        Node n = null;
+        if(nodes.containsKey(label) == false) {
+            n = new Node(label);
+            nodes.put(label, n);
+        } else {
+            n = nodes.get(label);
+        }
+        return n;
     }
 
     @Override
@@ -16,11 +30,7 @@ public class Node implements Comparable<Node>{
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof  Node) {
-            if(((Node) obj).getLabel() == this.label) {
-                return true;
-            } else {
-                return false;
-            }
+            return label.equals(((Node) obj).label);
         }
         return false;
     }

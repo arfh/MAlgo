@@ -34,7 +34,7 @@ public class Graph {
                 if(firstLine == true) {
                     Integer x = Integer.parseInt(line);
                     for(int i = 0; i < x; i++) {
-                        map.put(new Node(i), new ArrayList<Edge>());
+                        map.put(Node.getNode(i), new ArrayList<Edge>());
                     }
                     firstLine = false;
                 }
@@ -47,10 +47,8 @@ public class Graph {
                         Double costs = 1.0;
                         if(items.length >= 3) {
                             costs = Double.parseDouble(items[2]);
-                        } else {
-                            this.addEdge(new Edge(new Node(n2), new Node(n1), costs));
                         }
-                        Edge e = new Edge(new Node(n1), new Node(n2), costs);
+                        Edge e = new Edge(Node.getNode(n1), Node.getNode(n2), costs);
                         this.addEdge(e);
                     }
                 }
@@ -64,11 +62,15 @@ public class Graph {
 
     public void addEdge(Edge e) {
         // Füge Knoten zur Map hinzu, falls dieser noch nicht existiert.
-        if(map.containsKey(e.getStart()) == false) {
-            map.put(e.getStart(), new ArrayList<Edge>());
+        if(map.containsKey(e.getA()) == false) {
+            map.put(e.getA(), new ArrayList<Edge>());
+        }
+        if(map.containsKey(e.getB()) == false) {
+            map.put(e.getB(), new ArrayList<Edge>());
         }
         // Füge Kante zur Map hinzu
-        map.get(e.getStart()).add(e);
+        map.get(e.getA()).add(e);
+        map.get(e.getB()).add(e);
     }
 
     public boolean containsNode(Node n) {

@@ -29,12 +29,12 @@ public class Algorithm {
                     ArrayList<Edge> edges = g.getEdges(v);
                     int contains = 0;
                     for (Edge e: edges) {
-                        if(l2.contains(e.getEnd())) {
+                        if(l2.contains(e.getTarget(v))) {
                             contains++;
                         } else {
                             e0.add(e);
-                            l1.add(e.getEnd());
-                            l2.add(e.getEnd());
+                            l1.add(e.getTarget(v));
+                            l2.add(e.getTarget(v));
                             break;
                         }
                     }
