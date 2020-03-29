@@ -44,7 +44,7 @@ public class Graph {
                     if(items.length >= 2) {
                         int n1 = Integer.parseInt(items[0]);
                         int n2 = Integer.parseInt(items[1]);
-                        Double costs = 1.0;
+                        Double costs = Edge.DEF_COSTS;
                         if(items.length >= 3) {
                             costs = Double.parseDouble(items[2]);
                         }

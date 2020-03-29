@@ -2,7 +2,7 @@ package ISEMaster;
 
 public class Edge {
 
-    public static Double DEF_COSTS = 1.0;
+    public static final Double DEF_COSTS = 1.0;
     private Node a;
     private Node b;
     private Double costs;
