@@ -20,12 +20,4 @@ class AlgorithmTest {
         } catch (FileNotFoundException e) {
         }
     }
-
-    /*
-
-Graph3.txt,4
-Graph_gross.txt,222
-Graph_ganzgross.txt,9560
-Graph_ganzganzgross.txt,306
-     */
 }
