@@ -82,7 +82,7 @@ public class Graph {
         for (Map.Entry<Node, ArrayList<Edge>> entry: this.map.entrySet()) {
             edges = edges + entry.getValue().size();
         }
-        return edges;
+        return edges /2;
     }
 
     public Integer countNodes() {
