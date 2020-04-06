@@ -15,7 +15,10 @@ class AlgorithmTest {
     void getRelatedComponents(String filename, Integer components) {
         try {
             Graph g = new Graph(new File(filename));
+            long start = System.nanoTime();
             assertEquals(components, Algorithm.getRelatedComponents(g));
+            long end = System.nanoTime();
+            System.out.println((end-start)/1000.0/1000.0);
         } catch (FileNotFoundException e) {
         }
     }

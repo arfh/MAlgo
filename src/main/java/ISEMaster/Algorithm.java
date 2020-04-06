@@ -24,22 +24,15 @@ public class Algorithm {
                 l1.add(n);
                 l2.add(n);
                 while(l1.empty() == false) {
-                    Node v = l1.peek();
+                    Node v = l1.pop();
                     visited.add(v);
                     ArrayList<Edge> edges = g.getEdges(v);
-                    int contains = 0;
                     for (Edge e: edges) {
-                        if(l2.contains(e.getTarget(v))) {
-                            contains++;
-                        } else {
+                        if(!l2.contains(e.getTarget(v))) {
                             e0.add(e);
                             l1.add(e.getTarget(v));
                             l2.add(e.getTarget(v));
-                            break;
                         }
-                    }
-                    if(contains == edges.size()) {
-                        l1.pop();
                     }
                 }
                 trees.add(new Graph(e0));
