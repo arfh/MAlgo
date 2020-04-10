@@ -51,6 +51,6 @@ public class Edge {
     }
 
     public String toString() {
-        return "[" + a.toString() + " - " + b.toString() + ", " + costs + "]";
+        return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
     }
 }

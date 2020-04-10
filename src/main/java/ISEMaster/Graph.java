@@ -10,7 +10,18 @@ public class Graph {
     ArrayList<Node> nodes = new ArrayList<>();
 
     public Graph(ArrayList<Edge> edges) {
-
+        for (Edge e : edges) {
+            Node a = e.getA();
+            Node b = e.getB();
+            while (a.getLabel() >= nodes.size()) {
+                nodes.add(null);
+            }
+            nodes.set(a.getLabel(), a);
+            while (b.getLabel() >= nodes.size()) {
+                nodes.add(null);
+            }
+            nodes.set(b.getLabel(), b);
+        }
     }
 
     public Graph(File f) throws FileNotFoundException{
@@ -77,8 +88,10 @@ public class Graph {
     public String toString() {
         StringBuilder strb = new StringBuilder();
         for (Node entry : nodes) {
-            strb.append(entry.getLabel().toString());
-            strb.append("\n");
+            if(!(entry == null)) {
+                strb.append(entry.toString());
+                strb.append("\n");
+            }
         }
 
         return strb.toString();

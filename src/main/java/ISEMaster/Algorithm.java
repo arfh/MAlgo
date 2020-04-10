@@ -35,7 +35,6 @@ public class Algorithm {
             }
 
         }
-
         return trees;
     }
 

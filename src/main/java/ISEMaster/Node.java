@@ -30,7 +30,7 @@ public class Node implements Comparable<Node>{
     }
 
     public String toString() {
-        return "" + label;
+        return label + " " + edges.toString();
     }
 
     public ArrayList<Edge> getEdges() {
