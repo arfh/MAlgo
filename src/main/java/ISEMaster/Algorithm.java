@@ -1,6 +1,7 @@
 package ISEMaster;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Algorithm {
@@ -33,13 +34,41 @@ public class Algorithm {
                 }
                 trees.add(new Graph(e0));
             }
-
         }
         return trees;
     }
 
     public static Integer getRelatedComponents(Graph g) {
         return getDepthFirstSearchTrees(g).size();
+    }
+
+    public static Graph Kruskal(Graph g){
+        ArrayList<Edge> edges = new ArrayList<>();
+        boolean[] visited = new boolean[g.countNodes()];
+
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        for(Node n : g.getNodes()){
+            for(Edge e : n.getEdges()){
+                pq.add(e);
+            }
+        }
+
+        while(!pq.isEmpty()){
+            Edge e = pq.poll();
+            Node a = e.getA();
+            Node b = e.getB();
+            if(visited[a.getLabel()] && visited[b.getLabel()]){
+               continue;
+            }
+            visited[a.getLabel()]=true;
+            visited[b.getLabel()]=true;
+            Node a1 = new Node(a.getLabel());
+            Node b1 = new Node(b.getLabel());
+            edges.add(new Edge(a1,b1,e.getCosts()));
+        }
+
+        return new Graph(edges);
+
     }
 
 }

@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Graph {
-    ArrayList<Node> nodes = new ArrayList<>();
+    private ArrayList<Node> nodes = new ArrayList<>();
 
     public Graph(ArrayList<Edge> edges) {
         for (Edge e : edges) {
@@ -40,8 +40,6 @@ public class Graph {
             }
 
             while((line = br.readLine()) != null){
-                // Initialisieren von allen Knoten in der Map (=> Knoten ohne Kanten würden sonst nicht hinzugefügt werden)
-
                 // Hinzufügen aller Kanten in den Graphen
                 String[] items = line.split("\\t");
                 if(items.length >= 2) {
@@ -51,7 +49,6 @@ public class Graph {
                     if(items.length >= 3) {
                         costs = Double.parseDouble(items[2]);
                     }
-
                     Edge e = new Edge(nodes.get(n1), nodes.get(n2), costs);
                 }
             }

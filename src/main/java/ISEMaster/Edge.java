@@ -1,6 +1,6 @@
 package ISEMaster;
 
-public class Edge {
+public class Edge implements Comparable<Edge>{
 
     public static final Double DEF_COSTS = 1.0;
     private Node a;
@@ -17,7 +17,6 @@ public class Edge {
         this.costs = costs;
         a.addEdge(this);
         b.addEdge(this);
-
     }
 
     public boolean equals(Object o) {
@@ -52,5 +51,10 @@ public class Edge {
 
     public String toString() {
         return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
+    }
+
+    @Override
+    public int compareTo(Edge o) {
+        return this.costs.compareTo(o.costs);
     }
 }
