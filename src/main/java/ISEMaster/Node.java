@@ -1,13 +1,12 @@
 package ISEMaster;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.TreeMap;
+
 
 public class Node implements Comparable<Node>{
 
     private Integer label;
-    private ArrayList<Edge> edges = new ArrayList<Edge>();
+    private ArrayList<Edge> edges = new ArrayList<>();
 
     public Node(Integer label) {
         this.label = label;

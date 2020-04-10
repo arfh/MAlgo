@@ -5,18 +5,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class Graph {
-    ArrayList<Node> nodes = new ArrayList<Node>();
+    ArrayList<Node> nodes = new ArrayList<>();
 
     public Graph(ArrayList<Edge> edges) {
 
     }
 
     public Graph(File f) throws FileNotFoundException{
-        if(f.exists() == false) {
+        if(!f.exists()) {
             throw  new FileNotFoundException("File " + f.getPath() + " not found");
         }
         FileReader fr;
@@ -25,7 +23,7 @@ public class Graph {
             BufferedReader br = new BufferedReader(fr);
             String line = br.readLine();
 
-            Integer x = Integer.parseInt(line);
+            int x = Integer.parseInt(line);
             for(int i = 0; i < x; i++) {
                 nodes.add(new Node(i));
             }
@@ -49,7 +47,6 @@ public class Graph {
             br.close();
         }
         catch(Exception e) {
-            System.out.println(e);
         }
     }
 
@@ -62,7 +59,7 @@ public class Graph {
     }
 
     public Integer countEdges() {
-        Integer edges = 0;
+        int edges = 0;
         for (Node entry: nodes) {
             edges = edges + entry.getEdges().size();
         }
