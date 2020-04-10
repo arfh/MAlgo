@@ -9,8 +9,11 @@ import java.util.ArrayList;
 public class Graph {
     private ArrayList<Node> nodes = new ArrayList<>();
 
+    private double totalCosts = 0.0;
+
     public Graph(ArrayList<Edge> edges) {
         for (Edge e : edges) {
+            totalCosts += e.getCosts();
             Node a = e.getA();
             Node b = e.getB();
             while (a.getLabel() >= nodes.size()) {
@@ -49,6 +52,7 @@ public class Graph {
                     if(items.length >= 3) {
                         costs = Double.parseDouble(items[2]);
                     }
+                    totalCosts += costs;
                     Edge e = new Edge(nodes.get(n1), nodes.get(n2), costs);
                 }
             }
@@ -57,7 +61,6 @@ public class Graph {
         catch(Exception e) {
         }
     }
-
 
     public boolean containsNode(Node n) {
         if(nodes.size() > n.getLabel()){
@@ -80,6 +83,10 @@ public class Graph {
 
     public ArrayList<Node> getNodes() {
         return nodes;
+    }
+
+    public double getTotalCosts() {
+        return totalCosts;
     }
 
     public String toString() {

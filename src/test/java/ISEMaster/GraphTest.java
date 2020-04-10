@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class GraphTest {
+    class GraphTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 1)
