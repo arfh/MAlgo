@@ -15,6 +15,9 @@ public class Edge {
         this.a = a;
         this.b = b;
         this.costs = costs;
+        a.addEdge(this);
+        b.addEdge(this);
+
     }
 
     public boolean equals(Object o) {

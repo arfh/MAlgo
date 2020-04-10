@@ -1,25 +1,16 @@
 package ISEMaster;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class Node implements Comparable<Node>{
 
-    private static TreeMap<Integer, Node> nodes = new TreeMap<>();
     private Integer label;
+    private ArrayList<Edge> edges = new ArrayList<Edge>();
 
     public Node(Integer label) {
         this.label = label;
-    }
-
-    public static Node getNode(int label) {
-        Node n = null;
-        if(nodes.containsKey(label) == false) {
-            n = new Node(label);
-            nodes.put(label, n);
-        } else {
-            n = nodes.get(label);
-        }
-        return n;
     }
 
     @Override
@@ -41,5 +32,13 @@ public class Node implements Comparable<Node>{
 
     public String toString() {
         return "" + label;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public void addEdge(Edge e){
+        edges.add(e);
     }
 }

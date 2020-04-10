@@ -8,30 +8,27 @@ public class Algorithm {
 
     public static ArrayList<Graph> getDepthFirstSearchTrees(Graph g) {
         ArrayList<Graph> trees = new ArrayList<>();
-        TreeSet<Node> visited = new TreeSet<>();
+        boolean[] visited = new boolean[g.countNodes()];
 
         //Alle Knoten, die im Graph G existieren
         ArrayList<Node> knownNodes = g.getNodes();
 
         for (Node n: knownNodes) {
 
-            if(visited.add(n) == false) {
-                continue;
-            } else {
+            if(! visited[n.getLabel()]) {
+                visited[n.getLabel()] = true;
                 Stack<Node> l1 = new Stack<>();
-                TreeSet<Node> l2 = new TreeSet<>();
                 ArrayList<Edge> e0 = new ArrayList<>();
                 l1.add(n);
-                l2.add(n);
-                while(l1.empty() == false) {
+                while(!l1.empty()) {
                     Node v = l1.pop();
-                    visited.add(v);
-                    ArrayList<Edge> edges = g.getEdges(v);
+                    visited[v.getLabel()]=true;
+                    ArrayList<Edge> edges = v.getEdges();
                     for (Edge e: edges) {
-                        if(!l2.contains(e.getTarget(v))) {
+                        if(! visited[e.getTarget(v).getLabel()]) {
                             e0.add(e);
                             l1.add(e.getTarget(v));
-                            l2.add(e.getTarget(v));
+                            visited[e.getTarget(v).getLabel()] = true;
                         }
                     }
                 }
