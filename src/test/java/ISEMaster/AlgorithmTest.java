@@ -19,10 +19,14 @@ class AlgorithmTest {
         System.out.println((end-start)/1000.0/1000.0);
     }
 
-    @Test
-    public void Test(){
-        Graph g = GraphSupplier.getGraph("G_1_2.txt");
-        Graph t = Algorithm.Kruskal(g);
+    @ParameterizedTest
+    @CsvFileSource(resources = "/MST.csv", numLinesToSkip = 1)
+    public void testKruskal(String filename){
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        Graph t = Algorithm.kruskal(g);
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
         assertEquals(g.countNodes(),t.countNodes());
         assertEquals(g.countNodes()-1,t.countEdges());
     }
