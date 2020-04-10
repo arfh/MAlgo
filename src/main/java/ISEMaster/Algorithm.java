@@ -111,4 +111,48 @@ public class Algorithm {
 
 
 
+    public static Graph prim(Graph g, Node s){
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        ArrayList<Edge> edges = new ArrayList<>();
+        boolean[] visited = new boolean[g.countNodes()];
+        Node[] newNodes = new Node[g.countNodes()];
+
+        for(Edge e : s.getEdges()){
+            pq.add(e);
+
+        }
+
+        while(edges.size() < g.countNodes() - 1 && !pq.isEmpty()){
+            Edge e = pq.poll();
+            Node a = e.getA();
+            Node b = e.getB();
+
+            if(visited[a.getLabel()]){
+                s = a;
+            }
+            else{
+                s = b;
+            }
+
+            s = e.getTarget(s);
+            for(Edge tmp: s.getEdges()){
+                if(!visited[tmp.getTarget(s).getLabel()]) {
+                        pq.add(tmp);
+                }
+            }
+
+            if(visited[a.getLabel()] && visited[b.getLabel()]){
+                continue;
+            }
+            else{
+                visited[a.getLabel()] = true;
+                visited[b.getLabel()] = true;
+
+                addNewNodesToTree(e,newNodes,edges);
+            }
+
+        }
+
+        return new Graph(edges);
+    }
 }

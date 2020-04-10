@@ -32,5 +32,20 @@ class AlgorithmTest {
         assertEquals(g.countNodes()-1,t.countEdges());
         assertTrue(t.getTotalCosts() < costs);
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/MST.csv", numLinesToSkip = 1)
+    public void testPrim(String filename, Double costs){
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        Graph t = Algorithm.prim(g, g.getNodes().get(1));
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
+        System.out.println(t.getTotalCosts());
+        assertEquals(g.countNodes(),t.countNodes());
+        assertEquals(g.countNodes()-1,t.countEdges());
+        assertTrue(t.getTotalCosts() < costs);
+    }
+
 }
 
