@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
     class GraphTest {
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 7)
     public void testImport(String filename, Integer expNodes, Integer expEdges) {
         Graph g = GraphSupplier.getGraph(filename);
         assertEquals(expNodes, g.countNodes());
