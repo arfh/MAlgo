@@ -59,12 +59,14 @@ public class Algorithm {
             Node a = e.getA();
             Node b = e.getB();
             if(visited[a.getLabel()] && visited[b.getLabel()]){
-                if (gHandler.getGroupId(a) != gHandler.getGroupId(b)) {
-                    gHandler.unionGroupsByNodes(a, b);
+                int g1 = gHandler.getGroupId(a);
+                int g2 = gHandler.getGroupId(b);
+                if (g1 != g2) {
+                    gHandler.unionGroups(a, b);
                     addNewNodesToTree(e, newNodes, edges);
                 }
             } else {
-                gHandler.unionGroupsByNodes(a, b);
+                gHandler.unionGroups(a, b);
 
                 visited[a.getLabel()] = true;
                 visited[b.getLabel()] = true;

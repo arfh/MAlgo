@@ -9,7 +9,6 @@ public class GroupHandler {
     private TreeMap<Node, Integer> nodeToGroup = new TreeMap<>();
 
     public GroupHandler(ArrayList<Node> nodes) {
-        System.out.println(nodes.size());
         int g = 0;
         for(Node n: nodes) {
             if(!groupToNodes.containsKey(g)) {
@@ -30,7 +29,12 @@ public class GroupHandler {
         return nodeToGroup.get(n);
     }
 
-    public void unionGroups(int g1, int g2) {
+    public void unionGroups(Node a, Node b) {
+        int g1 = nodeToGroup.get(a);
+        int g2 = nodeToGroup.get(b);
+        if(g1 == g2) {
+            return;
+        }
         ArrayList<Node> nodes = groupToNodes.get(g1);
         if(groupToNodes.get(g2).size() < nodes.size()) {
             nodes = groupToNodes.get(g2);
@@ -42,13 +46,15 @@ public class GroupHandler {
         }
     }
 
-    public void unionGroupsByNodes(Node a, Node b) {
-        unionGroups(nodeToGroup.get(a), nodeToGroup.get(b));
-    }
-
     private void changeGroupId(ArrayList<Node> nodes, int groupID) {
+        ArrayList<Node> gNodes = groupToNodes.get(groupID);
         for (Node n: nodes) {
             nodeToGroup.put(n, groupID);
+            gNodes.add(n);
         }
+    }
+
+    public String toString() {
+        return groupToNodes.size() + " " + nodeToGroup.size();
     }
 }
