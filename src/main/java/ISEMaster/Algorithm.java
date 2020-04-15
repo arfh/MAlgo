@@ -92,25 +92,6 @@ public class Algorithm {
 
     }
 
-    private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
-        Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
-        Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
-        addEdgeToList(edges, new Edge(a1, b1, e.getCosts()));
-    }
-
-    private static Node createNewNodeIfNotExists(Node a, Node[] newNodes) {
-        if(newNodes[a.getLabel()] == null) {
-            newNodes[a.getLabel()] = new Node(a.getLabel());
-        }
-        return newNodes[a.getLabel()];
-    }
-
-    private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
-        edges.add(e);
-    }
-
-
-
     public static Graph prim(Graph g, Node s){
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         ArrayList<Edge> edges = new ArrayList<>();
@@ -144,5 +125,22 @@ public class Algorithm {
         }
 
         return new Graph(edges);
+    }
+
+    private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
+        edges.add(e);
+    }
+
+    private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
+        Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
+        Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
+        addEdgeToList(edges, new Edge(a1, b1, e.getCosts()));
+    }
+
+    private static Node createNewNodeIfNotExists(Node a, Node[] newNodes) {
+        if(newNodes[a.getLabel()] == null) {
+            newNodes[a.getLabel()] = new Node(a.getLabel());
+        }
+        return newNodes[a.getLabel()];
     }
 }

@@ -43,8 +43,8 @@ class AlgorithmTest {
     }
 
     private static void testMST(Graph t, int expNodes, double expCosts) {
-        assertEquals(t.countNodes(), t.countNodes());
-        assertEquals(t.countNodes()-1,t. countEdges());
+        assertEquals(expNodes, t.countNodes());
+        assertEquals(expNodes-1, t.countEdges());
         assertTrue(t.getTotalCosts() < expCosts);
     }
 
