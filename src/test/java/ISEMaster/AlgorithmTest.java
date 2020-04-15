@@ -1,6 +1,5 @@
 package ISEMaster;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -28,9 +27,7 @@ class AlgorithmTest {
         long end = System.nanoTime();
         System.out.println((end-start)/1000.0/1000.0);
         System.out.println(t.getTotalCosts());
-        assertEquals(g.countNodes(),t.countNodes());
-        assertEquals(g.countNodes()-1,t.countEdges());
-        assertTrue(t.getTotalCosts() < costs);
+        testMST(t, g.countNodes(), costs);
     }
 
     @ParameterizedTest
@@ -42,9 +39,13 @@ class AlgorithmTest {
         long end = System.nanoTime();
         System.out.println((end-start)/1000.0/1000.0);
         System.out.println(t.getTotalCosts());
-        assertEquals(g.countNodes(),t.countNodes());
-        assertEquals(g.countNodes()-1,t.countEdges());
-        assertTrue(t.getTotalCosts() < costs);
+        testMST(t, g.countNodes(), costs);
+    }
+
+    private static void testMST(Graph t, int expNodes, double expCosts) {
+        assertEquals(t.countNodes(), t.countNodes());
+        assertEquals(t.countNodes()-1,t. countEdges());
+        assertTrue(t.getTotalCosts() < expCosts);
     }
 
 }
