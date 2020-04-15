@@ -1,8 +1,11 @@
 package ISEMaster;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
+
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +50,5 @@ class AlgorithmTest {
         assertEquals(expNodes-1, t.countEdges());
         assertTrue(t.getTotalCosts() < expCosts);
     }
-
 }
 

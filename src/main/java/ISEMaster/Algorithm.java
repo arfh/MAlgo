@@ -43,9 +43,9 @@ public class Algorithm {
     }
 
     public static Graph kruskal(Graph g){
+        GroupHandler gHandler = new GroupHandler(g.getNodes());
         ArrayList<Edge> edges = new ArrayList<>();
         boolean[] visited = new boolean[g.countNodes()];
-        int[] group = new int[g.countNodes()];
         Node[] newNodes = new Node[g.countNodes()];
         PriorityQueue<Edge> pq = new PriorityQueue<>();
 
@@ -54,33 +54,17 @@ public class Algorithm {
                 pq.add(e);
             }
         }
-        int x = 1;
         while(!pq.isEmpty()){
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
             if(visited[a.getLabel()] && visited[b.getLabel()]){
-                if (group[a.getLabel()] != group[b.getLabel()]) {
-                    int ag = group[a.getLabel()];
-                    int bg = group[b.getLabel()];
-
-                    for(int i = 0; i < group.length; i++) {
-                        if (group[i] == bg) {
-                            group[i] = ag;
-                        }
-                    }
+                if (gHandler.getGroupId(a) != gHandler.getGroupId(b)) {
+                    gHandler.unionGroupsByNodes(a, b);
                     addNewNodesToTree(e, newNodes, edges);
                 }
             } else {
-                if(visited[a.getLabel()]) {
-                    group[b.getLabel()] = group[a.getLabel()];
-                } else if(visited[b.getLabel()]) {
-                    group[a.getLabel()] = group[b.getLabel()];
-                } else {
-                    group[a.getLabel()] = x;
-                    group[b.getLabel()] = x;
-                    x++;
-                }
+                gHandler.unionGroupsByNodes(a, b);
 
                 visited[a.getLabel()] = true;
                 visited[b.getLabel()] = true;
