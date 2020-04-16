@@ -11,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
     class GraphTest {
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 7)
-    public void testImport(String filename, Integer expNodes, Integer expEdges) {
-        Graph g = GraphSupplier.getGraph(filename);
-        assertEquals(expNodes, g.countNodes());
-        assertEquals(expEdges, g.countEdges());
-    }
-
     @Test
     public void testEdgeConstructor() {
         Node a = new Node(1);
@@ -27,5 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
         edges.add(new Edge(a, b));
         Graph g = new Graph(edges);
         System.out.println(g);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 7)
+    public void testImport(String filename, Integer expNodes, Integer expEdges) {
+        Graph g = GraphSupplier.getGraph(filename);
+        assertEquals(expNodes, g.countNodes());
+        assertEquals(expEdges, g.countEdges());
     }
 }

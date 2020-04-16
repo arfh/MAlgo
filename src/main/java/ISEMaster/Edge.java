@@ -19,6 +19,11 @@ public class Edge implements Comparable<Edge>{
         b.addEdge(this);
     }
 
+    @Override
+    public int compareTo(Edge o) {
+        return this.costs.compareTo(o.costs);
+    }
+
     public boolean equals(Object o) {
         if(o instanceof Edge) {
             return a.equals(((Edge) o).a) && b.equals(((Edge) o).b) && costs.equals(((Edge) o).costs);
@@ -51,10 +56,5 @@ public class Edge implements Comparable<Edge>{
 
     public String toString() {
         return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
-    }
-
-    @Override
-    public int compareTo(Edge o) {
-        return this.costs.compareTo(o.costs);
     }
 }

@@ -11,14 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AlgorithmTest {
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "/relatedComponentTest.csv", numLinesToSkip = 1)
-    void getRelatedComponents(String filename, Integer components) {
-        Graph g = GraphSupplier.getGraph(filename);
-        long start = System.nanoTime();
-        assertEquals(components, Algorithm.getRelatedComponents(g));
-        long end = System.nanoTime();
-        System.out.println((end-start)/1000.0/1000.0);
+    private static void testMST(Graph t, int expNodes, double expCosts) {
+        assertEquals(expNodes, t.countNodes());
+        assertEquals(expNodes-1, t.countEdges());
+        assertTrue(t.getTotalCosts() < expCosts);
     }
 
     @ParameterizedTest
@@ -45,10 +41,14 @@ class AlgorithmTest {
         testMST(t, g.countNodes(), costs);
     }
 
-    private static void testMST(Graph t, int expNodes, double expCosts) {
-        assertEquals(expNodes, t.countNodes());
-        assertEquals(expNodes-1, t.countEdges());
-        assertTrue(t.getTotalCosts() < expCosts);
+    @ParameterizedTest
+    @CsvFileSource(resources = "/relatedComponentTest.csv", numLinesToSkip = 1)
+    void getRelatedComponents(String filename, Integer components) {
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        assertEquals(components, Algorithm.getRelatedComponents(g));
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
     }
 }
 

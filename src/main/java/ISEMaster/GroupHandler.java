@@ -31,6 +31,10 @@ public class GroupHandler {
         return groupToNodes.get(groupID);
     }
 
+    public String toString() {
+        return groupToNodes.size() + " " + nodeToGroup.size();
+    }
+
     public void unionGroups(Node a, Node b) {
         int g1 = getGroupId(a);
         int g2 = getGroupId(b);
@@ -54,9 +58,5 @@ public class GroupHandler {
         for (Node n: nodes) {
             addNodeToGroup(n, groupID);
         }
-    }
-
-    public String toString() {
-        return groupToNodes.size() + " " + nodeToGroup.size();
     }
 }

@@ -5,11 +5,15 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node>{
 
-    private Integer label;
     private ArrayList<Edge> edges = new ArrayList<>();
+    private Integer label;
 
     public Node(Integer label) {
         this.label = label;
+    }
+
+    public void addEdge(Edge e){
+        edges.add(e);
     }
 
     @Override
@@ -25,19 +29,15 @@ public class Node implements Comparable<Node>{
         return false;
     }
 
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
     public Integer getLabel() {
         return label;
     }
 
     public String toString() {
         return label + " " + edges.toString();
-    }
-
-    public ArrayList<Edge> getEdges() {
-        return edges;
-    }
-
-    public void addEdge(Edge e){
-        edges.add(e);
     }
 }
