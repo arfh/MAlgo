@@ -14,8 +14,7 @@ public class GroupHandler {
             if(!groupToNodes.containsKey(g)) {
                 groupToNodes.put(g, new ArrayList<Node>());
             }
-            groupToNodes.get(g).add(n);
-            nodeToGroup.put(n, g);
+            addNodeToGroup(n,g);
             g++;
         }
     }
@@ -29,15 +28,22 @@ public class GroupHandler {
         return nodeToGroup.get(n);
     }
 
+    public ArrayList<Node> getNodesToGroup(int groupID) {
+        return groupToNodes.get(groupID);
+    }
+
     public void unionGroups(Node a, Node b) {
-        int g1 = nodeToGroup.get(a);
-        int g2 = nodeToGroup.get(b);
-        if(g1 == g2) {
+        int g1 = getGroupId(a);
+        int g2 = getGroupId(b);
+        /*if(g1 == g2) { überflüssig? da schon im Algorithmus selbst geprüft
             return;
-        }
-        ArrayList<Node> nodes = groupToNodes.get(g1);
-        if(groupToNodes.get(g2).size() < nodes.size()) {
-            nodes = groupToNodes.get(g2);
+        }*/
+        //speichere Nodes einer Gruppe ab und überprüfe ob Nodelist von g1 größer als g2
+        //falls ja: füge Nodes der Gruppe g2 zur größeren Gruppe g1 hinzu und lösche g2
+        //falls nicht: füge Nodes der Gruppe g1 zur Gruppe g2 hinzu und lösche g1
+        ArrayList<Node> nodes = getNodesToGroup(g1);
+        if(getNodesToGroup(g2).size() < nodes.size()) {
+            nodes = getNodesToGroup(g2);
             groupToNodes.remove(g2);
             changeGroupId(nodes, g1);
         } else {
@@ -47,10 +53,8 @@ public class GroupHandler {
     }
 
     private void changeGroupId(ArrayList<Node> nodes, int groupID) {
-        ArrayList<Node> gNodes = groupToNodes.get(groupID);
         for (Node n: nodes) {
-            nodeToGroup.put(n, groupID);
-            gNodes.add(n);
+            addNodeToGroup(n, groupID);
         }
     }
 

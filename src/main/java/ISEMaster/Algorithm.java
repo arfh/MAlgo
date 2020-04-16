@@ -58,6 +58,9 @@ public class Algorithm {
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
+            //wenn beide Knoten von betrachteter Kante besucht, speichere GruppenID ab und vergleiche ob
+            //GruppenID gleich ist. Wenn nicht: vereine Gruppen/Zusammenhangskomponenten zu einer und
+            //füge Kante die beide Komponenten verbindet zu Baum hinzu
             if(visited[a.getLabel()] && visited[b.getLabel()]){
                 int g1 = gHandler.getGroupId(a);
                 int g2 = gHandler.getGroupId(b);
@@ -65,12 +68,12 @@ public class Algorithm {
                     gHandler.unionGroups(a, b);
                     addNewNodesToTree(e, newNodes, edges);
                 }
-            } else {
+            } //wenn ein Knoten || kein Knoten noch nicht besucht wurde setze GruppenID gleich und
+            //markiere Knoten als besucht & füge Kante zu edge List/MST hinzu
+            else {
                 gHandler.unionGroups(a, b);
-
                 visited[a.getLabel()] = true;
                 visited[b.getLabel()] = true;
-
                 addNewNodesToTree(e, newNodes, edges);
             }
         }
@@ -84,17 +87,23 @@ public class Algorithm {
         boolean[] visited = new boolean[g.countNodes()];
         Node[] newNodes = new Node[g.countNodes()];
 
-        visited[s.getLabel()] = true; // Sonst würde die Kante, die s als target hat, die Kante zu s nochmal nehmen obwohl s zu target schon drin ist...
+        // Sonst würde die Kante, die s als target hat, die Kante zu s nochmal nehmen,
+        // obwohl s zu target schon drin ist...
+        visited[s.getLabel()] = true;
+
         for(Edge e : s.getEdges()){
             pq.add(e);
         }
 
-        while(edges.size() < g.countNodes() - 1 && ! pq.isEmpty()){
+        //alternative: edges.size() < g.countNodes() - 1
+        while(!pq.isEmpty()){
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
 
             if(!visited[a.getLabel()] || !visited[b.getLabel()] ) {
+                //Wenn aktueller Knoten a noch  nicht besucht --> nehme a
+                //sonst --> nehme b
                 Node actual = !visited[a.getLabel()] ? a : b;
 
                 if(!visited[actual.getLabel()]){
@@ -113,10 +122,11 @@ public class Algorithm {
         return new Graph(edges);
     }
 
-    private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
+        private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
         edges.add(e);
     }
 
+    //Erzeuge Knoten falls er noch nicht existiert & füge Knoten zu Baum hinzu
     private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
         Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
         Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
