@@ -5,43 +5,43 @@ import java.util.TreeMap;
 
 public class GroupHandler {
 
-    private TreeMap<Integer, ArrayList<Node>> groupToNodes = new TreeMap<>();
-    private TreeMap<Node, Integer> nodeToGroup = new TreeMap<>();
+    private ArrayList<ArrayList<Node>> groupToNodes = new ArrayList<>();
+    private ArrayList<Integer> nodeToGroup = new ArrayList<>();
 
     public GroupHandler(ArrayList<Node> nodes) {
         int g = 0;
+        for(int i = 0; i < nodes.size(); i++) {
+            groupToNodes.add(new ArrayList<Node>());
+            groupToNodes.get(i).add(nodes.get(i));
+            nodeToGroup.add(-1);
+        }
         for(Node n: nodes) {
-            if(!groupToNodes.containsKey(g)) {
-                groupToNodes.put(g, new ArrayList<Node>());
-            }
-            groupToNodes.get(g).add(n);
-            nodeToGroup.put(n, g);
-            g++;
+            nodeToGroup.set(n.getLabel(), n.getLabel());
         }
     }
 
     public void addNodeToGroup(Node n, int g) {
         groupToNodes.get(g).add(n);
-        nodeToGroup.put(n, g);
+        nodeToGroup.set(n.getLabel(), g);
     }
 
     public Integer getGroupId(Node n) {
-        return nodeToGroup.get(n);
+        return nodeToGroup.get(n.getLabel());
     }
 
     public void unionGroups(Node a, Node b) {
-        int g1 = nodeToGroup.get(a);
-        int g2 = nodeToGroup.get(b);
+        int g1 = nodeToGroup.get(a.getLabel());
+        int g2 = nodeToGroup.get(b.getLabel());
         if(g1 == g2) {
             return;
         }
         ArrayList<Node> nodes = groupToNodes.get(g1);
         if(groupToNodes.get(g2).size() < nodes.size()) {
             nodes = groupToNodes.get(g2);
-            groupToNodes.remove(g2);
+            groupToNodes.set(g2, new ArrayList<Node>());
             changeGroupId(nodes, g1);
         } else {
-            groupToNodes.remove(g1);
+            groupToNodes.set(g1, new ArrayList<Node>());
             changeGroupId(nodes, g2);
         }
     }
@@ -49,7 +49,7 @@ public class GroupHandler {
     private void changeGroupId(ArrayList<Node> nodes, int groupID) {
         ArrayList<Node> gNodes = groupToNodes.get(groupID);
         for (Node n: nodes) {
-            nodeToGroup.put(n, groupID);
+            nodeToGroup.set(n.getLabel(), groupID);
             gNodes.add(n);
         }
     }
