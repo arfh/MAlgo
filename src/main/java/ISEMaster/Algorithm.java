@@ -46,6 +46,7 @@ public class Algorithm {
         GroupHandler gHandler = new GroupHandler(g.getNodes());
         ArrayList<Edge> edges = new ArrayList<>();
         boolean[] visited = new boolean[g.countNodes()];
+        // Notwendig, da sonst alle Kanten aus g auch im MST existieren.
         Node[] newNodes = new Node[g.countNodes()];
         PriorityQueue<Edge> pq = new PriorityQueue<>();
 
@@ -85,6 +86,7 @@ public class Algorithm {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         ArrayList<Edge> edges = new ArrayList<>();
         boolean[] visited = new boolean[g.countNodes()];
+        // Notwendig, da sonst alle Kanten aus g auch im MST existieren.
         Node[] newNodes = new Node[g.countNodes()];
 
         // Sonst würde die Kante, die s als target hat, die Kante zu s nochmal nehmen,

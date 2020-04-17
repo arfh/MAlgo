@@ -44,9 +44,9 @@ public class GroupHandler {
         //speichere Nodes einer Gruppe ab und überprüfe ob Nodelist von g1 größer als g2
         //falls ja: füge Nodes der Gruppe g2 zur größeren Gruppe g1 hinzu und lösche g2
         //falls nicht: füge Nodes der Gruppe g1 zur Gruppe g2 hinzu und lösche g1
-        ArrayList<Node> nodes = groupToNodes.get(g1);
+        ArrayList<Node> nodes = getNodesToGroup(g1);
         if(groupToNodes.get(g2).size() < nodes.size()) {
-            nodes = groupToNodes.get(g2);
+            nodes = getNodesToGroup(g2);
             changeGroupId(nodes, g1, g2);
         } else {
             changeGroupId(nodes, g2, g1);
