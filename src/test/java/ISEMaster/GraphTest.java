@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 7)
+    @CsvFileSource(resources = "/importTestAll.csv", numLinesToSkip = 1)
     public void testImport(String filename, Integer expNodes, Integer expEdges) {
         Graph g = GraphSupplier.getGraph(filename);
         assertEquals(expNodes, g.countNodes());

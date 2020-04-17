@@ -45,7 +45,6 @@ public class Algorithm {
     public static Graph kruskal(Graph g){
         GroupHandler gHandler = new GroupHandler(g.getNodes());
         ArrayList<Edge> edges = new ArrayList<>();
-        boolean[] visited = new boolean[g.countNodes()];
         // Notwendig, da sonst alle Kanten aus g auch im MST existieren.
         Node[] newNodes = new Node[g.countNodes()];
         PriorityQueue<Edge> pq = new PriorityQueue<>();
@@ -59,27 +58,14 @@ public class Algorithm {
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
-            //wenn beide Knoten von betrachteter Kante besucht, speichere GruppenID ab und vergleiche ob
-            //GruppenID gleich ist. Wenn nicht: vereine Gruppen/Zusammenhangskomponenten zu einer und
-            //füge Kante die beide Komponenten verbindet zu Baum hinzu
-            if(visited[a.getLabel()] && visited[b.getLabel()]){
-                int g1 = gHandler.getGroupId(a);
-                int g2 = gHandler.getGroupId(b);
-                if (g1 != g2) {
-                    gHandler.unionGroups(a, b);
-                    addNewNodesToTree(e, newNodes, edges);
-                }
-            } //wenn ein Knoten || kein Knoten noch nicht besucht wurde setze GruppenID gleich und
-            //markiere Knoten als besucht & füge Kante zu edge List/MST hinzu
-            else {
+            int g1 = gHandler.getGroupId(a);
+            int g2 = gHandler.getGroupId(b);
+            if (g1 != g2) {
                 gHandler.unionGroups(a, b);
-                visited[a.getLabel()] = true;
-                visited[b.getLabel()] = true;
                 addNewNodesToTree(e, newNodes, edges);
             }
         }
         return new Graph(edges);
-
     }
 
     public static Graph prim(Graph g, Node s){
@@ -98,7 +84,7 @@ public class Algorithm {
         }
 
         //alternative: edges.size() < g.countNodes() - 1
-        while(!pq.isEmpty()){
+        while(!pq.isEmpty() && edges.size() < g.countNodes()){
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
@@ -124,7 +110,7 @@ public class Algorithm {
         return new Graph(edges);
     }
 
-        private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
+    private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
         edges.add(e);
     }
 

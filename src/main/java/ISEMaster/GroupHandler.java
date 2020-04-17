@@ -11,10 +11,7 @@ public class GroupHandler {
         for(int i = 0; i < nodes.size(); i++) {
             groupToNodes.add(new ArrayList<Node>());
             groupToNodes.get(i).add(nodes.get(i));
-            nodeToGroup.add(-1);
-        }
-        for(Node n: nodes) {
-            nodeToGroup.set(n.getLabel(), n.getLabel());
+            nodeToGroup.add(i);
         }
     }
 
@@ -39,7 +36,7 @@ public class GroupHandler {
         int g1 = getGroupId(a);
         int g2 = getGroupId(b);
         if(g1 == g2) {
-            return;
+            //return;
         }
         //speichere Nodes einer Gruppe ab und überprüfe ob Nodelist von g1 größer als g2
         //falls ja: füge Nodes der Gruppe g2 zur größeren Gruppe g1 hinzu und lösche g2
