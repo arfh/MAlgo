@@ -51,7 +51,7 @@ public class GroupHandler {
     }
 
     private void changeGroupId(ArrayList<Node> nodes, int groupID, int oldGroup) {
-        groupToNodes.set(oldGroup, new ArrayList<Node>());
+        //groupToNodes.set(oldGroup, new ArrayList<Node>());
         for (Node n: nodes) {
             addNodeToGroup(n, groupID);
         }
