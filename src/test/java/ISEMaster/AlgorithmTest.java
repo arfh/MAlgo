@@ -50,5 +50,16 @@ class AlgorithmTest {
         long end = System.nanoTime();
         System.out.println((end-start)/1000.0/1000.0);
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
+    void testNNA(String filename){
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        Route r = Algorithm.NNA(g, g.getNodes().get(0));
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
+        assertEquals(g.getNodes().size() , r.countEdges());
+    }
 }
 

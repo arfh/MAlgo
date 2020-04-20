@@ -94,7 +94,7 @@ public class Algorithm {
                 //sonst --> nehme b
                 Node actual = !visited[a.getLabel()] ? a : b;
 
-                if(!visited[actual.getLabel()]){
+                if(!visited[actual.getLabel()]){ // diese if kann glaube ich weg
                     for(Edge tmp: actual.getEdges()){
                         if(!visited[tmp.getTarget(actual).getLabel()]) {
                             pq.add(tmp);
@@ -126,5 +126,10 @@ public class Algorithm {
             newNodes[a.getLabel()] = new Node(a.getLabel());
         }
         return newNodes[a.getLabel()];
+    }
+
+    public static Route NNA(Graph g, Node s){
+
+        return new Route();
     }
 }
