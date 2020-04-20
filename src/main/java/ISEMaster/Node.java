@@ -29,6 +29,15 @@ public class Node implements Comparable<Node>{
         return false;
     }
 
+    public Edge getEdge(Node target){
+        for(Edge e: edges){
+            if(e.getTarget(this).equals(target)){
+                return e;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Edge> getEdges() {
         return edges;
     }

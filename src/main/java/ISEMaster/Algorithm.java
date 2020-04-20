@@ -129,7 +129,36 @@ public class Algorithm {
     }
 
     public static Route NNA(Graph g, Node s){
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        Route r = new Route();
+        boolean[] visited = new boolean[g.countNodes()];
+        Node[] newNodes = new Node[g.countNodes()];
 
-        return new Route();
+        visited[s.getLabel()] = true;
+
+
+
+        Node actual = s;
+        while(r.countEdges() < g.countNodes() - 1){
+            pq.clear();
+            for(Edge e : actual.getEdges()){
+                pq.add(e);
+            }
+
+            Edge e = null;
+            Node target = null;
+            do {
+                e = pq.poll();
+                target = e.getTarget(actual);
+            }while(visited[target.getLabel()]);
+
+            visited[target.getLabel()] = true;
+            r.addEdge(new Edge(actual, target, e.getCosts()));
+
+            actual = target;
+        }
+        r.addEdge(new Edge(actual, s, actual.getEdge(s).getCosts()));
+
+        return r;
     }
 }
