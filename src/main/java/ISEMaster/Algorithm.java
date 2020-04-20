@@ -6,8 +6,8 @@ import java.util.Stack;
 
 public class Algorithm {
 
-    public static ArrayList<Graph> getDepthFirstSearchTrees(Graph g) {
-        ArrayList<Graph> trees = new ArrayList<>();
+    public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {
+        ArrayList<ArrayList<Edge>> trees = new ArrayList<>();
         boolean[] visited = new boolean[g.countNodes()];
 
         //Alle Knoten, die im Graph G existieren
@@ -32,7 +32,7 @@ public class Algorithm {
                         }
                     }
                 }
-                trees.add(new Graph(e0));
+                trees.add(e0);
             }
         }
         return trees;
@@ -158,6 +158,47 @@ public class Algorithm {
             actual = target;
         }
         r.addEdge(new Edge(actual, s, actual.getEdge(s).getCosts()));
+
+        return r;
+    }
+
+    public static Route DBA(Graph g){
+        Route r = new Route();
+        Graph mst = kruskal(g);
+        ArrayList<Edge> dfs = getDepthFirstSearchTrees(mst).get(0); // 0, weil nur eine Zuskomp.
+
+        boolean[] visited = new boolean[mst.countNodes()];
+
+        Node lastVisited = null;
+        for(Edge e: dfs){
+            Node a = e.getA();
+            Node b = e.getB();
+
+            if(!visited[a.getLabel()] && !visited[b.getLabel()]){
+                visited[a.getLabel()] = true;
+                visited[b.getLabel()] = true;
+
+                lastVisited = b;
+                r.addEdge(e);
+            }
+            else if(!visited[a.getLabel()]){
+                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), a.getLabel());
+                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
+                lastVisited = a;
+                visited[a.getLabel()] = true;
+            }
+            else if(!visited[b.getLabel()]){
+                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), b.getLabel());
+                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
+                lastVisited = b;
+                visited[b.getLabel()] = true;
+            }
+        }
+        Node first = r.getFirstNode();
+        Node last = r.getLastNode();
+
+        Edge edgeTmp = g.getEdgeFromNodes(first.getLabel(), last.getLabel());
+        r.addEdge(new Edge(last, first, edgeTmp.getCosts()));
 
         return r;
     }

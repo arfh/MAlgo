@@ -64,5 +64,20 @@ class AlgorithmTest {
         System.out.println(r);
         System.out.println(r.totalCosts());
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
+    void testDBA(String filename){
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        Route r = Algorithm.DBA(g);
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
+        //assertEquals(g.getNodes().size() , r.countEdges());
+
+        System.out.println(r);
+        System.out.println(r.totalCosts());
+    }
+
 }
 

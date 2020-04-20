@@ -9,6 +9,14 @@ public class Route {
         edges.add(e);
     }
 
+    public Node getFirstNode(){
+        return edges.get(0).getA();
+    }
+
+    public Node getLastNode(){
+        return edges.get(edges.size()-1).getB();
+    }
+
     public double totalCosts(){
         double sum = 0.0;
         for(Edge e: edges){
