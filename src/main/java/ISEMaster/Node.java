@@ -12,8 +12,12 @@ public class Node implements Comparable<Node>{
         this.label = label;
     }
 
+    public Node(Node n){
+        this.label = n.label;
+    }
+
     public void addEdge(Edge e){
-        edges.add(e);
+          edges.add(e);
     }
 
     @Override

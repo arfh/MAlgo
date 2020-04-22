@@ -55,8 +55,6 @@ public class Algorithm {
 
         visited[s.getLabel()] = true;
 
-
-
         Node actual = s;
         while(r.countEdges() < g.countNodes() - 1) {
             pq.clear();
@@ -77,8 +75,48 @@ public class Algorithm {
             actual = target;
         }
         r.addEdge(new Edge(actual, s, actual.getEdge(s).getCosts()));
-
         return r;
+    }
+
+    public static Route bruteForceRoute(Graph g){
+        Route r = null;
+        Node s = g.getNodes().get(0);
+        ArrayList<Edge> edges = s.getEdges();
+        for(Edge e : edges){
+            Route newRoute = new Route();
+            newRoute.addEdge(e);
+            ArrayList<Node> unvisited = g.getNodes();
+            unvisited.remove(s);
+            unvisited.remove(e.getTarget(s));
+            Route tmp = recursiveBruteForce(g, newRoute, unvisited);
+            if(r == null) {
+                r = tmp;
+            }else if(r.totalCosts() > tmp.totalCosts()){
+                r=tmp;
+            }
+        }
+        return r;
+    }
+
+    private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited){
+        if(unvisited.isEmpty()){
+            Node first = r.getFirstNode();
+            Node last = r.getLastNode();
+            Edge tmp = g.getEdgeFromNodes(first.getLabel(),last.getLabel());
+            r.addEdge(new Edge(new Node(last), new Node(first), tmp.getCosts()));
+            return r;
+        }else{
+            Node first = unvisited.get(0);
+            ArrayList<Node> newUnvisited = new ArrayList<>();
+            for(int i=1; i < unvisited.size();i++){
+                newUnvisited.add(unvisited.get(i));
+            }
+            Route newRoute = new Route(r);
+            Node last = r.getLastNode();
+            Edge tmp = g.getEdgeFromNodes(first.getLabel(),last.getLabel());
+            newRoute.addEdge(new Edge(new Node(last), new Node(first), tmp.getCosts()));
+            return recursiveBruteForce(g,newRoute,newUnvisited);
+        }
     }
 
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {
@@ -89,7 +127,6 @@ public class Algorithm {
         ArrayList<Node> knownNodes = g.getNodes();
 
         for (Node n: knownNodes) {
-
             if(! visited[n.getLabel()]) {
                 visited[n.getLabel()] = true;
                 Stack<Node> l1 = new Stack<>();
@@ -157,9 +194,8 @@ public class Algorithm {
         for(Edge e : s.getEdges()) {
             pq.add(e);
         }
-
         //alternative: edges.size() < g.countNodes() - 1
-        while(!pq.isEmpty() && edges.size() < g.countNodes()) {
+        while(!pq.isEmpty()) {
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
@@ -168,12 +204,9 @@ public class Algorithm {
                 //Wenn aktueller Knoten a noch  nicht besucht --> nehme a
                 //sonst --> nehme b
                 Node actual = !visited[a.getLabel()] ? a : b;
-
-                if(!visited[actual.getLabel()]) { // diese if kann glaube ich weg
-                    for(Edge tmp: actual.getEdges()) {
-                        if(!visited[tmp.getTarget(actual).getLabel()]) {
-                            pq.add(tmp);
-                        }
+                for(Edge tmp: actual.getEdges()) {
+                    if(!visited[tmp.getTarget(actual).getLabel()]) {
+                        pq.add(tmp);
                     }
                 }
                 visited[a.getLabel()] = true;
@@ -181,7 +214,6 @@ public class Algorithm {
                 addNewNodesToTree(e,newNodes,edges);
             }
         }
-
         return new Graph(edges);
     }
 
@@ -189,8 +221,8 @@ public class Algorithm {
         edges.add(e);
     }
 
-    //Erzeuge Knoten falls er noch nicht existiert & füge Knoten zu Baum hinzu
     private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
+        //Erzeuge Knoten falls er noch nicht existiert & füge Knoten zu Baum hinzu
         Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
         Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
         addEdgeToList(edges, new Edge(a1, b1, e.getCosts()));

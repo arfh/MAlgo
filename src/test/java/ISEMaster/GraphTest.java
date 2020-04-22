@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
         ArrayList<Edge> edges = new ArrayList<>();
         edges.add(new Edge(a, b));
         Graph g = new Graph(edges);
-        System.out.println(g);
+        //System.out.println(g);
     }
 
     @ParameterizedTest

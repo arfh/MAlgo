@@ -95,7 +95,7 @@ public class Graph {
     }
 
     public ArrayList<Node> getNodes() {
-        return nodes;
+        return (ArrayList<Node>)nodes.clone();
     }
 
     public double getTotalCosts() {

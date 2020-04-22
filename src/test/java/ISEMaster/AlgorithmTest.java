@@ -79,5 +79,19 @@ class AlgorithmTest {
         System.out.println(r.totalCosts());
     }
 
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/bb.csv", numLinesToSkip = 1)
+    void testBruteForceRoute(String filename, double costs){
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        Route r = Algorithm.bruteForceRoute(g);
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
+        assertEquals(g.getNodes().size() , r.countEdges());
+        System.out.println(r);
+        System.out.println(r.totalCosts());
+    }
+
 }
 
