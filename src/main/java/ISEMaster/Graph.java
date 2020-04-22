@@ -27,20 +27,7 @@ public class Graph {
         }
     }
 
-    public Edge getEdgeFromNodes(int a, int b){
-        for(Edge e: getEdgesFromNode(a)){
-            if(e.getTarget(nodes.get(a)).equals(nodes.get(b))){
-                return e;
-            }
-        }
-        return null;
-    }
-
-    public ArrayList<Edge> getEdgesFromNode(int n){
-        return nodes.get(n).getEdges();
-    }
-
-    public Graph(File f) throws FileNotFoundException{
+    public Graph(File f) throws FileNotFoundException {
         if(!f.exists()) {
             throw  new FileNotFoundException("File " + f.getPath() + " not found");
         }
@@ -92,6 +79,19 @@ public class Graph {
 
     public Integer countNodes() {
         return nodes.size();
+    }
+
+    public Edge getEdgeFromNodes(int a, int b) {
+        for(Edge e: getEdgesFromNode(a)) {
+            if(e.getTarget(nodes.get(a)).equals(nodes.get(b))) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Edge> getEdgesFromNode(int n){
+        return nodes.get(n).getEdges();
     }
 
     public ArrayList<Node> getNodes() {

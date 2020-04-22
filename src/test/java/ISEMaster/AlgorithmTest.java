@@ -53,20 +53,6 @@ class AlgorithmTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
-    void testNNA(String filename, double costs){
-        Graph g = GraphSupplier.getGraph(filename);
-        long start = System.nanoTime();
-        Route r = Algorithm.NNA(g, g.getNodes().get(0));
-        long end = System.nanoTime();
-        System.out.println((end-start)/1000.0/1000.0);
-        assertEquals(g.getNodes().size() , r.countEdges());
-
-        System.out.println(r);
-        System.out.println(r.totalCosts());
-    }
-
-    @ParameterizedTest
-    @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
     void testDBA(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
@@ -77,6 +63,20 @@ class AlgorithmTest {
         if(costs > 0) {
             assertTrue(r.totalCosts() <= 2*costs);
         }
+
+        System.out.println(r);
+        System.out.println(r.totalCosts());
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
+    void testNNA(String filename, double costs){
+        Graph g = GraphSupplier.getGraph(filename);
+        long start = System.nanoTime();
+        Route r = Algorithm.NNA(g, g.getNodes().get(0));
+        long end = System.nanoTime();
+        System.out.println((end-start)/1000.0/1000.0);
+        assertEquals(g.getNodes().size() , r.countEdges());
 
         System.out.println(r);
         System.out.println(r.totalCosts());

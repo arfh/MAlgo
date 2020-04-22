@@ -6,6 +6,81 @@ import java.util.Stack;
 
 public class Algorithm {
 
+    public static Route DBA(Graph g) {
+        Route r = new Route();
+        Graph mst = kruskal(g);
+        ArrayList<Edge> dfs = getDepthFirstSearchTrees(mst).get(0); // 0, weil nur eine Zuskomp.
+
+        boolean[] visited = new boolean[mst.countNodes()];
+
+        Node lastVisited = null;
+        for(Edge e: dfs) {
+            Node a = e.getA();
+            Node b = e.getB();
+
+            if(!visited[a.getLabel()] && !visited[b.getLabel()]) {
+                visited[a.getLabel()] = true;
+                visited[b.getLabel()] = true;
+
+                lastVisited = b;
+                r.addEdge(e);
+            }
+            else if(!visited[a.getLabel()]) {
+                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), a.getLabel());
+                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
+                lastVisited = a;
+                visited[a.getLabel()] = true;
+            }
+            else if(!visited[b.getLabel()]) {
+                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), b.getLabel());
+                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
+                lastVisited = b;
+                visited[b.getLabel()] = true;
+            }
+        }
+        Node first = r.getFirstNode();
+        Node last = r.getLastNode();
+
+        Edge edgeTmp = g.getEdgeFromNodes(first.getLabel(), last.getLabel());
+        r.addEdge(new Edge(last, first, edgeTmp.getCosts()));
+
+        return r;
+    }
+
+    public static Route NNA(Graph g, Node s) {
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        Route r = new Route();
+        boolean[] visited = new boolean[g.countNodes()];
+        Node[] newNodes = new Node[g.countNodes()];
+
+        visited[s.getLabel()] = true;
+
+
+
+        Node actual = s;
+        while(r.countEdges() < g.countNodes() - 1) {
+            pq.clear();
+            for(Edge e : actual.getEdges()) {
+                pq.add(e);
+            }
+
+            Edge e = null;
+            Node target = null;
+            do {
+                e = pq.poll();
+                target = e.getTarget(actual);
+            } while(visited[target.getLabel()]);
+
+            visited[target.getLabel()] = true;
+            r.addEdge(new Edge(actual, target, e.getCosts()));
+
+            actual = target;
+        }
+        r.addEdge(new Edge(actual, s, actual.getEdge(s).getCosts()));
+
+        return r;
+    }
+
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {
         ArrayList<ArrayList<Edge>> trees = new ArrayList<>();
         boolean[] visited = new boolean[g.countNodes()];
@@ -42,19 +117,19 @@ public class Algorithm {
         return getDepthFirstSearchTrees(g).size();
     }
 
-    public static Graph kruskal(Graph g){
+    public static Graph kruskal(Graph g) {
         GroupHandler gHandler = new GroupHandler(g.getNodes());
         ArrayList<Edge> edges = new ArrayList<>();
         // Notwendig, da sonst alle Kanten aus g auch im MST existieren.
         Node[] newNodes = new Node[g.countNodes()];
         PriorityQueue<Edge> pq = new PriorityQueue<>();
 
-        for(Node n : g.getNodes()){
-            for(Edge e : n.getEdges()){
+        for(Node n : g.getNodes()) {
+            for(Edge e : n.getEdges()) {
                 pq.add(e);
             }
         }
-        while(!pq.isEmpty()){
+        while(!pq.isEmpty()) {
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
@@ -68,7 +143,7 @@ public class Algorithm {
         return new Graph(edges);
     }
 
-    public static Graph prim(Graph g, Node s){
+    public static Graph prim(Graph g, Node s) {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         ArrayList<Edge> edges = new ArrayList<>();
         boolean[] visited = new boolean[g.countNodes()];
@@ -79,12 +154,12 @@ public class Algorithm {
         // obwohl s zu target schon drin ist...
         visited[s.getLabel()] = true;
 
-        for(Edge e : s.getEdges()){
+        for(Edge e : s.getEdges()) {
             pq.add(e);
         }
 
         //alternative: edges.size() < g.countNodes() - 1
-        while(!pq.isEmpty() && edges.size() < g.countNodes()){
+        while(!pq.isEmpty() && edges.size() < g.countNodes()) {
             Edge e = pq.poll();
             Node a = e.getA();
             Node b = e.getB();
@@ -94,8 +169,8 @@ public class Algorithm {
                 //sonst --> nehme b
                 Node actual = !visited[a.getLabel()] ? a : b;
 
-                if(!visited[actual.getLabel()]){ // diese if kann glaube ich weg
-                    for(Edge tmp: actual.getEdges()){
+                if(!visited[actual.getLabel()]) { // diese if kann glaube ich weg
+                    for(Edge tmp: actual.getEdges()) {
                         if(!visited[tmp.getTarget(actual).getLabel()]) {
                             pq.add(tmp);
                         }
@@ -126,80 +201,5 @@ public class Algorithm {
             newNodes[a.getLabel()] = new Node(a.getLabel());
         }
         return newNodes[a.getLabel()];
-    }
-
-    public static Route NNA(Graph g, Node s){
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
-        Route r = new Route();
-        boolean[] visited = new boolean[g.countNodes()];
-        Node[] newNodes = new Node[g.countNodes()];
-
-        visited[s.getLabel()] = true;
-
-
-
-        Node actual = s;
-        while(r.countEdges() < g.countNodes() - 1){
-            pq.clear();
-            for(Edge e : actual.getEdges()){
-                pq.add(e);
-            }
-
-            Edge e = null;
-            Node target = null;
-            do {
-                e = pq.poll();
-                target = e.getTarget(actual);
-            }while(visited[target.getLabel()]);
-
-            visited[target.getLabel()] = true;
-            r.addEdge(new Edge(actual, target, e.getCosts()));
-
-            actual = target;
-        }
-        r.addEdge(new Edge(actual, s, actual.getEdge(s).getCosts()));
-
-        return r;
-    }
-
-    public static Route DBA(Graph g){
-        Route r = new Route();
-        Graph mst = kruskal(g);
-        ArrayList<Edge> dfs = getDepthFirstSearchTrees(mst).get(0); // 0, weil nur eine Zuskomp.
-
-        boolean[] visited = new boolean[mst.countNodes()];
-
-        Node lastVisited = null;
-        for(Edge e: dfs){
-            Node a = e.getA();
-            Node b = e.getB();
-
-            if(!visited[a.getLabel()] && !visited[b.getLabel()]){
-                visited[a.getLabel()] = true;
-                visited[b.getLabel()] = true;
-
-                lastVisited = b;
-                r.addEdge(e);
-            }
-            else if(!visited[a.getLabel()]){
-                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), a.getLabel());
-                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
-                lastVisited = a;
-                visited[a.getLabel()] = true;
-            }
-            else if(!visited[b.getLabel()]){
-                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), b.getLabel());
-                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
-                lastVisited = b;
-                visited[b.getLabel()] = true;
-            }
-        }
-        Node first = r.getFirstNode();
-        Node last = r.getLastNode();
-
-        Edge edgeTmp = g.getEdgeFromNodes(first.getLabel(), last.getLabel());
-        r.addEdge(new Edge(last, first, edgeTmp.getCosts()));
-
-        return r;
     }
 }

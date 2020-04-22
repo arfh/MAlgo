@@ -9,6 +9,10 @@ public class Route {
         edges.add(e);
     }
 
+    public int countEdges(){
+        return edges.size();
+    }
+
     public Node getFirstNode(){
         return edges.get(0).getA();
     }
@@ -17,19 +21,15 @@ public class Route {
         return edges.get(edges.size()-1).getB();
     }
 
+    public String toString(){
+        return edges.toString();
+    }
+
     public double totalCosts(){
         double sum = 0.0;
         for(Edge e: edges){
             sum+=e.getCosts();
         }
         return sum;
-    }
-
-    public String toString(){
-        return edges.toString();
-    }
-
-    public int countEdges(){
-        return edges.size();
     }
 }
