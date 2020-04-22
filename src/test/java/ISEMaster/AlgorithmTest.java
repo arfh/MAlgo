@@ -1,11 +1,8 @@
 package ISEMaster;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-
-import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,7 +49,7 @@ class AlgorithmTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/NNA_DBA.csv", numLinesToSkip = 1)
     void testDBA(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
@@ -69,7 +66,7 @@ class AlgorithmTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/NNA.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/NNA_DBA.csv", numLinesToSkip = 1)
     void testNNA(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
