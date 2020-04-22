@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 public class Route {
     private ArrayList<Edge> edges = new ArrayList<>();
-    private double costs = 0;
+    private double costs = 0.0;
 
     public Route(Route r){
         for(Edge e : r.edges){
             edges.add(e);
+            costs = costs + e.getCosts();
         }
     }
 
@@ -16,7 +17,7 @@ public class Route {
 
     public void addEdge(Edge e){
         edges.add(e);
-        costs += e.getCosts();
+        costs = costs + e.getCosts();
     }
 
     public int countEdges(){
@@ -36,6 +37,10 @@ public class Route {
     }
 
     public double totalCosts(){
-        return costs;
+        double sum = 0.0;
+        for(Edge e: edges) {
+            sum = sum + e.getCosts();
+        }
+        return sum;
     }
 }
