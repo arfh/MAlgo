@@ -89,6 +89,7 @@ class AlgorithmTest {
         long end = System.nanoTime();
         System.out.println((end-start)/1000.0/1000.0);
         assertEquals(g.getNodes().size() , r.countEdges());
+        assertTrue(r.totalCosts() <= costs);
         System.out.println(r);
         System.out.println(r.totalCosts());
     }
