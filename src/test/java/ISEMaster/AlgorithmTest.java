@@ -87,11 +87,11 @@ class AlgorithmTest {
         long start = System.nanoTime();
         Route r = Algorithm.bruteForceRoute(g);
         long end = System.nanoTime();
-        System.out.println((end-start)/1000.0/1000.0);
-        assertEquals(g.getNodes().size() , r.countEdges());
-        assertTrue(r.totalCosts() <= costs);
+        System.out.println("Time: " + (end-start)/1000.0/1000.0);
         System.out.println(r);
         System.out.println(r.totalCosts());
+        assertEquals(g.getNodes().size() , r.countEdges());
+        assertTrue(r.totalCosts() <= costs);
     }
 
 }

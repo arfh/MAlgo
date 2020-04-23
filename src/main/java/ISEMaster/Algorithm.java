@@ -6,7 +6,6 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Algorithm {
-
     public static Route DBA(Graph g) {
         Route r = new Route();
         Graph mst = kruskal(g);
@@ -27,13 +26,13 @@ public class Algorithm {
                 r.addEdge(e);
             }
             else if(!visited[a.getLabel()]) {
-                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), a.getLabel());
+                Edge edgeTmp = g.getEdgeFromNodes(lastVisited, a);
                 r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
                 lastVisited = a;
                 visited[a.getLabel()] = true;
             }
             else if(!visited[b.getLabel()]) {
-                Edge edgeTmp = g.getEdgeFromNodes(lastVisited.getLabel(), b.getLabel());
+                Edge edgeTmp = g.getEdgeFromNodes(lastVisited, b);
                 r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
                 lastVisited = b;
                 visited[b.getLabel()] = true;
@@ -42,7 +41,7 @@ public class Algorithm {
         Node first = r.getFirstNode();
         Node last = r.getLastNode();
 
-        Edge edgeTmp = g.getEdgeFromNodes(first.getLabel(), last.getLabel());
+        Edge edgeTmp = g.getEdgeFromNodes(first, last);
         r.addEdge(new Edge(last, first, edgeTmp.getCosts()));
 
         return r;
@@ -79,47 +78,38 @@ public class Algorithm {
         return r;
     }
 
-    public static Route bruteForceRoute(Graph g){
+    public static Route bruteForceRoute(Graph g) {
+        Route cheapest = new Route();
+        ArrayList<Node> unvisited = g.getNodes();
+        Node s = unvisited.remove(0);
+        Node n = null;
         Route r = null;
-        Node s = g.getNodes().get(0);
-        ArrayList<Edge> edges = s.getEdges();
-        ArrayList<Route> routes = new ArrayList<>();
-        for(Edge e : edges){
-            Route newRoute = new Route();
-            newRoute.addEdge(e);
-            ArrayList<Node> unvisited = g.getNodes();
-            unvisited.remove(s);
-            unvisited.remove(e.getTarget(s));
-            recursiveBruteForce(g, newRoute, unvisited, routes);
+        for(int i = 0; i < unvisited.size(); i++) {
+            n = unvisited.remove(0);
+            r = addEdgeToRoute(new Route(), s, n, g);
+            cheapest = recursiveBruteForce(g, r, unvisited, cheapest);
+            unvisited.add(n);
         }
-        r = routes.get(0);
-        for(Route tmp: routes) {
-            if(r.totalCosts() > tmp.totalCosts()) {
-                r = tmp;
-            }
-        }
-        System.out.println(r.totalCosts());
-        return r;
+        return cheapest;
     }
 
-    private static void recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, ArrayList<Route> routes){
-
+    private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest){
         if(unvisited.isEmpty()){
-            Node first = r.getFirstNode();
-            Node last = r.getLastNode();
-            Edge tmp = g.getEdgeFromNodes(first.getLabel(),last.getLabel());
-            r.addEdge(new Edge(new Node(last), new Node(first), tmp.getCosts()));
-            routes.add(r);
-        }else{
-            for(Node n : unvisited) {
-                ArrayList<Node> newUnvisited = (ArrayList<Node>)unvisited.clone();
-                newUnvisited.remove(n);
-                Route newRoute = new Route(r);
-                Node last = r.getLastNode();
-                Edge tmp = g.getEdgeFromNodes(n.getLabel(),last.getLabel());
-                newRoute.addEdge(new Edge(new Node(last), new Node(n), tmp.getCosts()));
-                recursiveBruteForce(g,newRoute,newUnvisited, routes);
+            addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
+            if(cheapest.countEdges() == 0 || r.totalCosts() < cheapest.totalCosts()) {
+                return r;
+            } else {
+                return cheapest;
             }
+        }else{
+            for(int i = 0; i < unvisited.size(); i++) {
+                Node n = unvisited.remove(0);
+                Route newRoute = new Route(r);
+                addEdgeToRoute(newRoute, r.getLastNode(), n, g);
+                cheapest = recursiveBruteForce(g, newRoute, unvisited, cheapest);
+                unvisited.add(n);
+            }
+            return cheapest;
         }
     }
 
@@ -237,5 +227,13 @@ public class Algorithm {
             newNodes[a.getLabel()] = new Node(a.getLabel());
         }
         return newNodes[a.getLabel()];
+    }
+
+    private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
+        Edge tmp = g.getEdgeFromNodes(a, b);
+        Edge newE = new Edge(new Node(a), new Node(b), tmp.getCosts());
+        r.addEdge(new Edge(new Node(a), new Node(b), tmp.getCosts()));
+
+        return r;
     }
 }

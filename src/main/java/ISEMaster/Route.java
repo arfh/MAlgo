@@ -17,7 +17,7 @@ public class Route {
 
     public void addEdge(Edge e){
         edges.add(e);
-        costs = costs + e.getCosts();
+        costs += e.getCosts();
     }
 
     public int countEdges(){
@@ -37,10 +37,6 @@ public class Route {
     }
 
     public double totalCosts(){
-        double sum = 0.0;
-        for(Edge e: edges) {
-            sum = sum + e.getCosts();
-        }
-        return sum;
+        return costs;
     }
 }

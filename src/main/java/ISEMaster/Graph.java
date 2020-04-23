@@ -53,7 +53,13 @@ public class Graph {
                         costs = Double.parseDouble(items[2]);
                     }
                     totalCosts += costs;
-                    Edge e = new Edge(nodes.get(n1), nodes.get(n2), costs);
+                    Node a = nodes.get(n1);
+                    Node b = nodes.get(n2);
+                    Edge e = new Edge(a, b, costs);
+                    //a.addEdge(e);
+                    //b.addEdge(e);
+
+
                 }
             }
             br.close();
@@ -81,17 +87,13 @@ public class Graph {
         return nodes.size();
     }
 
-    public Edge getEdgeFromNodes(int a, int b) {
-        for(Edge e: getEdgesFromNode(a)) {
-            if(e.getTarget(nodes.get(a)).equals(nodes.get(b))) {
+    public Edge getEdgeFromNodes(Node a, Node b) {
+        for(Edge e: nodes.get(a.getLabel()).getEdges()) {
+            if(e.getTarget(a).equals(b)) {
                 return e;
             }
         }
         return null;
-    }
-
-    public ArrayList<Edge> getEdgesFromNode(int n){
-        return nodes.get(n).getEdges();
     }
 
     public ArrayList<Node> getNodes() {
