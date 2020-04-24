@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class Algorithm {
     static int x = 0;
@@ -94,7 +95,6 @@ public class Algorithm {
             cheapest = recursiveBruteForce(g, r, unvisited, cheapest);
             unvisited.add(n);
         }
-
         return cheapest;
     }
 
@@ -102,7 +102,7 @@ public class Algorithm {
         if(unvisited.isEmpty()){
             addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
             x++;
-            if(cheapest.countEdges() == 0 || r.totalCosts() < cheapest.totalCosts()) {
+            if(checkCheapestRoute(r, cheapest)) {
                 return r;
             } else {
                 return cheapest;
@@ -117,6 +117,13 @@ public class Algorithm {
             }
             return cheapest;
         }
+    }
+
+    private static boolean checkCheapestRoute(Route r, Route currentCheapest) {
+        if(currentCheapest.countEdges() == 0) {
+            return true;
+        }
+        return r.totalCosts() < currentCheapest.totalCosts();
     }
 
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {
