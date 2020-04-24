@@ -6,6 +6,8 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Algorithm {
+    static int x = 0;
+
     public static Route DBA(Graph g) {
         Route r = new Route();
         Graph mst = kruskal(g);
@@ -27,13 +29,13 @@ public class Algorithm {
             }
             else if(!visited[a.getLabel()]) {
                 Edge edgeTmp = g.getEdgeFromNodes(lastVisited, a);
-                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
+                r.addEdge(edgeTmp);
                 lastVisited = a;
                 visited[a.getLabel()] = true;
             }
             else if(!visited[b.getLabel()]) {
                 Edge edgeTmp = g.getEdgeFromNodes(lastVisited, b);
-                r.addEdge(new Edge(lastVisited, edgeTmp.getTarget(lastVisited), edgeTmp.getCosts()));
+                r.addEdge(edgeTmp);
                 lastVisited = b;
                 visited[b.getLabel()] = true;
             }
@@ -79,23 +81,27 @@ public class Algorithm {
     }
 
     public static Route bruteForceRoute(Graph g) {
+        x = 0;
         Route cheapest = new Route();
         ArrayList<Node> unvisited = g.getNodes();
         Node s = unvisited.remove(0);
         Node n = null;
         Route r = null;
+
         for(int i = 0; i < unvisited.size(); i++) {
             n = unvisited.remove(0);
             r = addEdgeToRoute(new Route(), s, n, g);
             cheapest = recursiveBruteForce(g, r, unvisited, cheapest);
             unvisited.add(n);
         }
+
         return cheapest;
     }
 
     private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest){
         if(unvisited.isEmpty()){
             addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
+            x++;
             if(cheapest.countEdges() == 0 || r.totalCosts() < cheapest.totalCosts()) {
                 return r;
             } else {
@@ -217,23 +223,24 @@ public class Algorithm {
 
     private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
         //Erzeuge Knoten falls er noch nicht existiert & füge Knoten zu Baum hinzu
-        Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
-        Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
+        Node a1 = createNewNodeIfNotExists(e.getA(), newNodes, e);
+        Node b1 = createNewNodeIfNotExists(e.getB(), newNodes, e);
         addEdgeToList(edges, new Edge(a1, b1, e.getCosts()));
     }
 
-    private static Node createNewNodeIfNotExists(Node a, Node[] newNodes) {
+    private static Node createNewNodeIfNotExists(Node a, Node[] newNodes, Edge edge) {
         if(newNodes[a.getLabel()] == null) {
-            newNodes[a.getLabel()] = new Node(a.getLabel());
+            Node newA = new Node(a.getLabel());
+            newA.addEdge(edge);
+            newNodes[a.getLabel()] = newA;
         }
         return newNodes[a.getLabel()];
     }
 
     private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
         Edge tmp = g.getEdgeFromNodes(a, b);
-        Edge newE = new Edge(new Node(a), new Node(b), tmp.getCosts());
         r.addEdge(new Edge(new Node(a), new Node(b), tmp.getCosts()));
-
+        //r.addEdge(tmp);
         return r;
     }
 }

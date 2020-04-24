@@ -56,8 +56,8 @@ public class Graph {
                     Node a = nodes.get(n1);
                     Node b = nodes.get(n2);
                     Edge e = new Edge(a, b, costs);
-                    //a.addEdge(e);
-                    //b.addEdge(e);
+                    a.addEdge(e);
+                    b.addEdge(e);
 
 
                 }

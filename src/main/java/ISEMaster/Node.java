@@ -17,7 +17,9 @@ public class Node implements Comparable<Node>{
     }
 
     public void addEdge(Edge e){
-          edges.add(e);
+        if(e != null) {
+            edges.add(e);
+        }
     }
 
     @Override
