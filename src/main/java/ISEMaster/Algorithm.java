@@ -1,13 +1,10 @@
 package ISEMaster;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Algorithm {
-    static int x = 0;
 
     public static Route DBA(Graph g) {
         Route r = new Route();
@@ -82,7 +79,6 @@ public class Algorithm {
     }
 
     public static Route bruteForceRoute(Graph g) {
-        x = 0;
         Route cheapest = new Route();
         ArrayList<Node> unvisited = g.getNodes();
         Node s = unvisited.remove(0);
@@ -101,7 +97,6 @@ public class Algorithm {
     private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest){
         if(unvisited.isEmpty()){
             addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
-            x++;
             if(checkCheapestRoute(r, cheapest)) {
                 return r;
             } else {
@@ -244,7 +239,6 @@ public class Algorithm {
 
     private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
         Edge tmp = g.getEdgeFromNodes(a, b);
-        //r.addEdge(new Edge(new Node(a), new Node(b), tmp.getCosts()));
         r.addEdge(tmp);
         return r;
     }
