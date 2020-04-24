@@ -244,8 +244,8 @@ public class Algorithm {
 
     private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
         Edge tmp = g.getEdgeFromNodes(a, b);
-        r.addEdge(new Edge(new Node(a), new Node(b), tmp.getCosts()));
-        //r.addEdge(tmp);
+        //r.addEdge(new Edge(new Node(a), new Node(b), tmp.getCosts()));
+        r.addEdge(tmp);
         return r;
     }
 }
