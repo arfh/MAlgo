@@ -224,21 +224,19 @@ public class Algorithm {
         return new Graph(edges);
     }
 
-    private static void addEdgeToList(ArrayList<Edge> edges, Edge e) {
-        edges.add(e);
-    }
-
     private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
         //Erzeuge Knoten falls er noch nicht existiert & füge Knoten zu Baum hinzu
-        Node a1 = createNewNodeIfNotExists(e.getA(), newNodes, e);
-        Node b1 = createNewNodeIfNotExists(e.getB(), newNodes, e);
-        addEdgeToList(edges, new Edge(a1, b1, e.getCosts()));
+        Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
+        Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
+        Edge newEdge = new Edge(a1, b1, e.getCosts());
+        a1.addEdge(newEdge);
+        b1.addEdge(newEdge);
+        edges.add(newEdge);
     }
 
-    private static Node createNewNodeIfNotExists(Node a, Node[] newNodes, Edge edge) {
+    private static Node createNewNodeIfNotExists(Node a, Node[] newNodes) {
         if(newNodes[a.getLabel()] == null) {
             Node newA = new Node(a.getLabel());
-            newA.addEdge(edge);
             newNodes[a.getLabel()] = newA;
         }
         return newNodes[a.getLabel()];
