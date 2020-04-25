@@ -53,7 +53,7 @@ class AlgorithmTest {
     void testDBA(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
-        Route r = Algorithm.DBA(g);
+        Route r = Algorithm.DBA(g, g.getNodes().get(1));
         long end = System.nanoTime();
         System.out.println((end-start)/1000.0/1000.0);
         assertEquals(g.getNodes().size() , r.countEdges());
@@ -85,7 +85,7 @@ class AlgorithmTest {
     void testBruteForceRoute(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
-        Route r = Algorithm.bruteForceRoute(g);
+        Route r = Algorithm.bruteForceRoute(g, true);
         long end = System.nanoTime();
         System.out.println("Time: " + (end-start)/1000.0/1000.0);
         System.out.println(r);

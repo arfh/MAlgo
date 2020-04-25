@@ -6,9 +6,9 @@ import java.util.Stack;
 
 public class Algorithm {
 
-    public static Route DBA(Graph g) {
+    public static Route DBA(Graph g, Node s) {
         Route r = new Route();
-        Graph mst = kruskal(g);
+        Graph mst = prim(g, s);
         ArrayList<Edge> dfs = getDepthFirstSearchTrees(mst).get(0); // 0, weil nur eine Zuskomp.
 
         boolean[] visited = new boolean[mst.countNodes()];
@@ -78,23 +78,23 @@ public class Algorithm {
         return r;
     }
 
-    public static Route bruteForceRoute(Graph g) {
+    public static Route bruteForceRoute(Graph g, final boolean bb) {
         Route cheapest = new Route();
         ArrayList<Node> unvisited = g.getNodes();
         Node s = unvisited.remove(0);
-        Node n = null;
-        Route r = null;
 
         for(int i = 0; i < unvisited.size(); i++) {
-            n = unvisited.remove(0);
-            r = addEdgeToRoute(new Route(), s, n, g);
-            cheapest = recursiveBruteForce(g, r, unvisited, cheapest);
+            Node n = unvisited.remove(0);
+            Route r = addEdgeToRoute(new Route(), s, n, g);
+            if(!bb || checkCheapestRoute(r, cheapest)) {
+                cheapest = recursiveBruteForce(g, r, unvisited, cheapest, bb);
+            }
             unvisited.add(n);
         }
         return cheapest;
     }
 
-    private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest){
+    private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest, final boolean bb){
         if(unvisited.isEmpty()){
             addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
             if(checkCheapestRoute(r, cheapest)) {
@@ -107,7 +107,9 @@ public class Algorithm {
                 Node n = unvisited.remove(0);
                 Route newRoute = new Route(r);
                 addEdgeToRoute(newRoute, r.getLastNode(), n, g);
-                cheapest = recursiveBruteForce(g, newRoute, unvisited, cheapest);
+                if(!bb || checkCheapestRoute(newRoute, cheapest)) {
+                    cheapest = recursiveBruteForce(g, newRoute, unvisited, cheapest, bb);
+                }
                 unvisited.add(n);
             }
             return cheapest;
