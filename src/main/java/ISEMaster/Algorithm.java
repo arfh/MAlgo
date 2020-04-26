@@ -19,9 +19,6 @@ public class Algorithm {
             Node b = e.getB();
 
             if(!visited[a.getLabel()] && !visited[b.getLabel()]) {
-                visited[a.getLabel()] = true;
-                visited[b.getLabel()] = true;
-
                 lastVisited = b;
                 r.addEdge(e);
             }
@@ -29,14 +26,14 @@ public class Algorithm {
                 Edge edgeTmp = g.getEdgeFromNodes(lastVisited, a);
                 r.addEdge(edgeTmp);
                 lastVisited = a;
-                visited[a.getLabel()] = true;
             }
             else if(!visited[b.getLabel()]) {
                 Edge edgeTmp = g.getEdgeFromNodes(lastVisited, b);
                 r.addEdge(edgeTmp);
                 lastVisited = b;
-                visited[b.getLabel()] = true;
             }
+            visited[a.getLabel()] = true;
+            visited[b.getLabel()] = true;
         }
         Node first = r.getFirstNode();
         Node last = r.getLastNode();
@@ -81,7 +78,7 @@ public class Algorithm {
     public static Route bruteForceRoute(Graph g, final boolean bb) {
         Route cheapest = new Route();
         ArrayList<Node> unvisited = g.getNodes();
-        Node s = unvisited.remove(0);
+        Node s = unvisited.remove(0); // Startknoten
 
         for(int i = 0; i < unvisited.size(); i++) {
             Node n = unvisited.remove(0);
@@ -97,7 +94,7 @@ public class Algorithm {
     private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest, final boolean bb){
         if(unvisited.isEmpty()){
             addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
-            if(checkCheapestRoute(r, cheapest)) {
+            if(checkCheapestRoute(r, cheapest)) { // vergleicht aktuelle Route mit bisher günstigsterer und gibt Günstigere zurück
                 return r;
             } else {
                 return cheapest;
@@ -107,7 +104,7 @@ public class Algorithm {
                 Node n = unvisited.remove(0);
                 Route newRoute = new Route(r);
                 addEdgeToRoute(newRoute, r.getLastNode(), n, g);
-                if(!bb || checkCheapestRoute(newRoute, cheapest)) {
+                if(!bb || checkCheapestRoute(newRoute, cheapest)) { //cheapest ist bis Erstellung der ersten Route immer leer, daher ist checkCheapestRoute erstmal immer True
                     cheapest = recursiveBruteForce(g, newRoute, unvisited, cheapest, bb);
                 }
                 unvisited.add(n);

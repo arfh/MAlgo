@@ -85,7 +85,7 @@ class AlgorithmTest {
     void testBruteForceRoute(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
-        Route r = Algorithm.bruteForceRoute(g, true);
+        Route r = Algorithm.bruteForceRoute(g, false);
         long end = System.nanoTime();
         System.out.println("Time: " + (end-start)/1000.0/1000.0);
         System.out.println(r);
