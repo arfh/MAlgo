@@ -19,17 +19,15 @@ public class Algorithm {
             Node b = e.getB();
 
             if(!visited[a.getLabel()] && !visited[b.getLabel()]) {
+                addEdgeToRoute(r, a, b, g);
                 lastVisited = b;
-                r.addEdge(e);
             }
             else if(!visited[a.getLabel()]) {
-                Edge edgeTmp = g.getEdgeFromNodes(lastVisited, a);
-                r.addEdge(edgeTmp);
+                addEdgeToRoute(r, lastVisited, a, g);
                 lastVisited = a;
             }
             else if(!visited[b.getLabel()]) {
-                Edge edgeTmp = g.getEdgeFromNodes(lastVisited, b);
-                r.addEdge(edgeTmp);
+                addEdgeToRoute(r, lastVisited, b, g);
                 lastVisited = b;
             }
             visited[a.getLabel()] = true;
@@ -38,9 +36,7 @@ public class Algorithm {
         Node first = r.getFirstNode();
         Node last = r.getLastNode();
 
-        Edge edgeTmp = g.getEdgeFromNodes(first, last);
-        r.addEdge(new Edge(last, first, edgeTmp.getCosts()));
-
+        addEdgeToRoute(r, last, first, g);
         return r;
     }
 
@@ -67,11 +63,11 @@ public class Algorithm {
             } while(visited[target.getLabel()]);
 
             visited[target.getLabel()] = true;
-            r.addEdge(new Edge(actual, target, e.getCosts()));
+            addEdgeToRoute(r, actual, target, g);
 
             actual = target;
         }
-        r.addEdge(new Edge(actual, s, actual.getEdge(s).getCosts()));
+        addEdgeToRoute(r, actual, s, g);
         return r;
     }
 
