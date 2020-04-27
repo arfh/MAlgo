@@ -220,7 +220,7 @@ public class Algorithm {
         Node b1 = createNewNodeIfNotExists(e.getB(), newNodes);
         Edge newEdge = new Edge(a1, b1, e.getCosts());
         a1.addEdge(newEdge);
-        b1.addEdge(newEdge);
+        b1.addEdge(new Edge(b1, a1, e.getCosts()));
         edges.add(newEdge);
     }
 
