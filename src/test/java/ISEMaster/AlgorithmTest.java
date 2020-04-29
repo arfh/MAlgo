@@ -1,5 +1,6 @@
 package ISEMaster;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -85,7 +86,7 @@ class AlgorithmTest {
     void testBruteForceRoute(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
         long start = System.nanoTime();
-        Route r = Algorithm.bruteForceRoute(g, false);
+        Route r = Algorithm.bruteForceRoute(g, true);
         long end = System.nanoTime();
         System.out.println("Time: " + (end-start)/1000.0/1000.0);
         System.out.println(r);
@@ -94,5 +95,16 @@ class AlgorithmTest {
         assertTrue(r.totalCosts() <= costs);
     }
 
+    @ParameterizedTest
+    @CsvFileSource(resources = "/dijkstra.csv", numLinesToSkip = 1)
+    void testDijkstra(String filename, int startNode, int tartgetNode, double cost, boolean directed){
+        Graph g = GraphSupplier.getGraph(filename, directed);
+        long start = System.nanoTime();
+        DijkstraTree tree = Algorithm.djikstra(g, g.getNodes().get(startNode));
+        long end = System.nanoTime();
+        System.out.println("Time: " + (end-start)/1000.0/1000.0);
+        //System.out.println(tree);
+        assertTrue(cost >= tree.getDist(g.getNodes().get(tartgetNode)));
+    }
 }
 

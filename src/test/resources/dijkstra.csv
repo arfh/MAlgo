@@ -1,0 +1,4 @@
+filename,start,target,cost,directed
+Wege1.txt,0,2,6.0,false
+G_1_2.txt,0,1,2.36802,false
+G_1_2.txt,0,1,5.562831,true

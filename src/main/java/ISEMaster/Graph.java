@@ -11,6 +11,10 @@ public class Graph {
 
     private double totalCosts = 0.0;
 
+    public Graph(File f) throws FileNotFoundException {
+        this(f, false);
+    }
+
     public Graph(ArrayList<Edge> edges) {
         for (Edge e : edges) {
             totalCosts += e.getCosts();
@@ -27,7 +31,7 @@ public class Graph {
         }
     }
 
-    public Graph(File f) throws FileNotFoundException {
+    public Graph(File f, boolean directed) throws FileNotFoundException {
         if(!f.exists()) {
             throw  new FileNotFoundException("File " + f.getPath() + " not found");
         }
@@ -57,10 +61,10 @@ public class Graph {
                     Node b = nodes.get(n2);
                     Edge e = new Edge(a, b, costs);
                     a.addEdge(e);
-                    e = new Edge(b, a, costs);
-                    b.addEdge(e);
-
-
+                    if(directed == false) {
+                        e = new Edge(b, a, costs);
+                        b.addEdge(e);
+                    }
                 }
             }
             br.close();

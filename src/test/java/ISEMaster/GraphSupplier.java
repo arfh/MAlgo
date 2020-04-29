@@ -7,8 +7,12 @@ public class GraphSupplier {
     private static TreeMap<String, Graph> map = new TreeMap<>();
 
     public static Graph getGraph(String filename) {
+        return getGraph(filename, false);
+    }
+
+    public static Graph getGraph(String filename, boolean directed) {
         try {
-            return new Graph(new File(filename));
+            return new Graph(new File(filename), directed);
         } catch (Exception e) {
             return null;
         }

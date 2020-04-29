@@ -1,5 +1,6 @@
 package ISEMaster;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
@@ -114,6 +115,31 @@ public class Algorithm {
             return true;
         }
         return r.totalCosts() < currentCheapest.totalCosts();
+    }
+
+    public static DijkstraTree djikstra(Graph g, Node s) {
+        DijkstraTree tree = new DijkstraTree(g.countNodes());
+        tree.setDist(s, 0.0);
+        tree.setPrev(s, s);
+
+        ArrayList<Node> queue = new ArrayList<>();
+        queue.add(s);
+
+        while(!queue.isEmpty()) {
+            Node actual = queue.remove(0);
+            for(Edge e: actual.getEdges()) {
+                Node target = e.getTarget(actual);
+                if(tree.getPrev(target) == null) {
+                    queue.add(target);
+                }
+                double costs = (e.getCosts() + tree.getDist(actual));
+                if (tree.getDist(target) > costs) {
+                    tree.setPrev(target, actual);
+                    tree.setDist(target, costs);
+                }
+            }
+        }
+        return tree;
     }
 
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {
