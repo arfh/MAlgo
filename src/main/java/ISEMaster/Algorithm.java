@@ -45,7 +45,6 @@ public class Algorithm {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         Route r = new Route();
         boolean[] visited = new boolean[g.countNodes()];
-        Node[] newNodes = new Node[g.countNodes()];
 
         visited[s.getLabel()] = true;
 
@@ -86,35 +85,6 @@ public class Algorithm {
             unvisited.add(n);
         }
         return cheapest;
-    }
-
-    private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest, final boolean bb){
-        if(unvisited.isEmpty()){
-            addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
-            if(checkCheapestRoute(r, cheapest)) { // vergleicht aktuelle Route mit bisher günstigsterer und gibt Günstigere zurück
-                return r;
-            } else {
-                return cheapest;
-            }
-        }else{
-            for(int i = 0; i < unvisited.size(); i++) {
-                Node n = unvisited.remove(0);
-                Route newRoute = new Route(r);
-                addEdgeToRoute(newRoute, r.getLastNode(), n, g);
-                if(!bb || checkCheapestRoute(newRoute, cheapest)) { //cheapest ist bis Erstellung der ersten Route immer leer, daher ist checkCheapestRoute erstmal immer True
-                    cheapest = recursiveBruteForce(g, newRoute, unvisited, cheapest, bb);
-                }
-                unvisited.add(n);
-            }
-            return cheapest;
-        }
-    }
-
-    private static boolean checkCheapestRoute(Route r, Route currentCheapest) {
-        if(currentCheapest.countEdges() == 0) {
-            return true;
-        }
-        return r.totalCosts() < currentCheapest.totalCosts();
     }
 
     public static DijkstraTree djikstra(Graph g, Node s) {
@@ -240,6 +210,12 @@ public class Algorithm {
         return new Graph(edges);
     }
 
+    private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
+        Edge tmp = g.getEdgeFromNodes(a, b);
+        r.addEdge(tmp);
+        return r;
+    }
+
     private static void addNewNodesToTree(Edge e, Node[] newNodes, ArrayList<Edge> edges) {
         //Erzeuge Knoten falls er noch nicht existiert & füge Knoten zu Baum hinzu
         Node a1 = createNewNodeIfNotExists(e.getA(), newNodes);
@@ -250,6 +226,13 @@ public class Algorithm {
         edges.add(newEdge);
     }
 
+    private static boolean checkCheapestRoute(Route r, Route currentCheapest) {
+        if(currentCheapest.countEdges() == 0) {
+            return true;
+        }
+        return r.totalCosts() < currentCheapest.totalCosts();
+    }
+
     private static Node createNewNodeIfNotExists(Node a, Node[] newNodes) {
         if(newNodes[a.getLabel()] == null) {
             Node newA = new Node(a.getLabel());
@@ -258,9 +241,25 @@ public class Algorithm {
         return newNodes[a.getLabel()];
     }
 
-    private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
-        Edge tmp = g.getEdgeFromNodes(a, b);
-        r.addEdge(tmp);
-        return r;
+    private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest, final boolean bb){
+        if(unvisited.isEmpty()){
+            addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
+            if(checkCheapestRoute(r, cheapest)) { // vergleicht aktuelle Route mit bisher günstigsterer und gibt Günstigere zurück
+                return r;
+            } else {
+                return cheapest;
+            }
+        }else{
+            for(int i = 0; i < unvisited.size(); i++) {
+                Node n = unvisited.remove(0);
+                Route newRoute = new Route(r);
+                addEdgeToRoute(newRoute, r.getLastNode(), n, g);
+                if(!bb || checkCheapestRoute(newRoute, cheapest)) { //cheapest ist bis Erstellung der ersten Route immer leer, daher ist checkCheapestRoute erstmal immer True
+                    cheapest = recursiveBruteForce(g, newRoute, unvisited, cheapest, bb);
+                }
+                unvisited.add(n);
+            }
+            return cheapest;
+        }
     }
 }
