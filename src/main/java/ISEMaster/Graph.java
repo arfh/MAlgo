@@ -45,7 +45,6 @@ public class Graph {
             for(int i = 0; i < x; i++) {
                 nodes.add(new Node(i));
             }
-
             while((line = br.readLine()) != null){
                 // Hinzufügen aller Kanten in den Graphen
                 String[] items = line.split("\\t");
@@ -90,6 +89,14 @@ public class Graph {
 
     public Integer countNodes() {
         return nodes.size();
+    }
+
+    public ArrayList<Edge> getAllEdges(){
+        ArrayList<Edge> res = new ArrayList<>();
+        for(Node n: nodes) {
+            res.addAll(n.getEdges());
+        }
+        return res;
     }
 
     public Edge getEdgeFromNodes(Node a, Node b) {

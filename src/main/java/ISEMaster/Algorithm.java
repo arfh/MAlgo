@@ -7,6 +7,35 @@ import java.util.Stack;
 
 public class Algorithm {
 
+    public static DijkstraTree bellmanFord(Graph g, Node s) throws NegativCycleException{
+        DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
+        ArrayList<Edge> edges = g.getAllEdges();
+        for(int i = 1; i < g.countNodes(); i++) {
+            for(Edge e: edges) {
+                Node v = e.getA();
+                Node w = e.getB();
+                Double ce = e.getCosts();
+                double cw = tree.getDist(w);
+                double tmpc = tree.getDist(v) + ce;
+
+                if(tmpc < cw) {
+                    tree.setDist(w, tmpc);
+                    tree.setPrev(w, v);
+                }
+            }
+        }
+
+        for(Edge e: edges) {
+            double cv = tree.getDist(e.getA());
+            double ce = e.getCosts();
+            double cw = tree.getDist(e.getB());
+            if((cv +ce) < cw) {
+                throw new NegativCycleException();
+            }
+        }
+        return tree;
+    }
+
     public static Route DBA(Graph g, Node s) {
         Route r = new Route();
         Graph mst = prim(g, s);
@@ -88,9 +117,7 @@ public class Algorithm {
     }
 
     public static DijkstraTree djikstra(Graph g, Node s) {
-        DijkstraTree tree = new DijkstraTree(g.countNodes());
-        tree.setDist(s, 0.0);
-        tree.setPrev(s, s);
+        DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
 
         ArrayList<Node> queue = new ArrayList<>();
         queue.add(s);

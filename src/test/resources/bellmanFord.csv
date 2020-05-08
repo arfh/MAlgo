@@ -1,0 +1,5 @@
+filename,start,target,cost,directed,exception
+Wege1.txt,0,2,6.0,false,false
+Wege3.txt,0,0,0.0,false,true
+G_1_2.txt,0,1,2.36802,false,false
+G_1_2.txt,0,1,5.562831,true,false

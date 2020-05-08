@@ -4,13 +4,17 @@ import java.util.Arrays;
 
 public class DijkstraTree {
     private double[] dist;
-    Node[] prev;
+    private Node[] prev;
 
-    public DijkstraTree(int nodeCount) {
+    public DijkstraTree(int nodeCount, Node start) {
         dist = new double[nodeCount];
         Arrays.fill(dist, Double.POSITIVE_INFINITY);
 
         prev = new Node[nodeCount];
+
+
+        setDist(start, 0.0);
+        setPrev(start, start);
     }
 
     public void setDist(Node n, double c) {

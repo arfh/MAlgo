@@ -106,5 +106,22 @@ class AlgorithmTest {
         //System.out.println(tree);
         assertTrue(cost >= tree.getDist(g.getNodes().get(tartgetNode)));
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/bellmanFord.csv", numLinesToSkip = 1)
+    void testBellmanFord(String filename, int startNode, int tartgetNode, double cost, boolean directed, boolean exception){
+        Graph g = GraphSupplier.getGraph(filename, directed);
+        try {
+            long start = System.nanoTime();
+            DijkstraTree tree = Algorithm.bellmanFord(g, g.getNodes().get(startNode));
+            long end = System.nanoTime();
+            System.out.println("Time: " + (end - start) / 1000.0 / 1000.0);
+            //System.out.println(tree);
+            assertTrue(cost >= tree.getDist(g.getNodes().get(tartgetNode)));
+            assertTrue(!exception);
+        } catch (NegativCycleException e) {
+            assertTrue(exception);
+        }
+    }
 }
 
