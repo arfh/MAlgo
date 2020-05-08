@@ -1,14 +1,15 @@
 package ISEMaster;
 
+import java.util.Arrays;
+
 public class DijkstraTree {
     private double[] dist;
     Node[] prev;
 
     public DijkstraTree(int nodeCount) {
         dist = new double[nodeCount];
-        for(int i = 0; i < nodeCount; i++) {
-            dist[i] = Double.POSITIVE_INFINITY;
-        }
+        Arrays.fill(dist, Double.POSITIVE_INFINITY);
+
         prev = new Node[nodeCount];
     }
 
