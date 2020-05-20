@@ -17,6 +17,10 @@ public class Visited {
         return v[n.getLabel()];
     }
 
+    public boolean isNotVisited(Node n) {
+        return !isVisited(n);
+    }
+
     public void setVisited(Node n) {
         if(n.getLabel() < v.length) {
             if(v[n.getLabel()] == false) {

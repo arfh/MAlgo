@@ -1,40 +1,8 @@
 package ISEMaster;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.*;
 
 public class Algorithm {
-
-    public static DijkstraTree bellmanFord(Graph g, Node s) throws NegativCycleException{
-        DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
-        ArrayList<Edge> edges = g.getAllEdges();
-        for(int i = 1; i < g.countNodes(); i++) {
-            for(Edge e: edges) {
-                Node v = e.getA();
-                Node w = e.getB();
-                Double ce = e.getCosts();
-                double cw = tree.getDist(w);
-                double tmpc = tree.getDist(v) + ce;
-
-                if(tmpc < cw) {
-                    tree.setDist(w, tmpc);
-                    tree.setPrev(w, v);
-                }
-            }
-        }
-
-        for(Edge e: edges) {
-            double cv = tree.getDist(e.getA());
-            double ce = e.getCosts();
-            double cw = tree.getDist(e.getB());
-            if((cv +ce) < cw) {
-                throw new NegativCycleException();
-            }
-        }
-        return tree;
-    }
 
     public static Route DBA(Graph g, Node s) {
         Route r = new Route();
@@ -100,6 +68,35 @@ public class Algorithm {
         return r;
     }
 
+    public static DijkstraTree bellmanFord(Graph g, Node s) throws NegativCycleException{
+        DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
+        ArrayList<Edge> edges = g.getAllEdges();
+        for(int i = 1; i < g.countNodes(); i++) {
+            for(Edge e: edges) {
+                Node v = e.getA();
+                Node w = e.getB();
+                Double ce = e.getCosts();
+                double cw = tree.getDist(w);
+                double tmpc = tree.getDist(v) + ce;
+
+                if(tmpc < cw) {
+                    tree.setDist(w, tmpc);
+                    tree.setPrev(w, v);
+                }
+            }
+        }
+
+        for(Edge e: edges) {
+            double cv = tree.getDist(e.getA());
+            double ce = e.getCosts();
+            double cw = tree.getDist(e.getB());
+            if((cv +ce) < cw) {
+                throw new NegativCycleException();
+            }
+        }
+        return tree;
+    }
+
     public static Route bruteForceRoute(Graph g, final boolean bb) {
         Route cheapest = new Route();
         ArrayList<Node> unvisited = g.getNodes();
@@ -144,6 +141,37 @@ public class Algorithm {
             }
         }
         return tree;
+    }
+
+    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {
+        ArrayList<Node> res = new ArrayList<>();
+        Queue<Node> queue = new LinkedList<>();
+        Visited v = new Visited(g.countNodes());
+        queue.add(s);
+        v.setVisited(s);
+        Predesessor pre = new Predesessor(g, s);
+
+        while(!queue.isEmpty()) {
+            Node actual = queue.poll();
+            for(Edge e: actual.getEdges()) {
+                Node target = e.getTarget(actual);
+                if(v.isNotVisited(target)) {
+                    v.setVisited(target);
+                    queue.add(target);
+                    pre.setPrevNode(target, actual);
+                    if(target.equals(t)) {
+                        Node tmp = target;
+                        while(!tmp.equals(s)) {
+                            res.add(0, tmp);
+                            tmp = pre.getPrevNode(tmp);
+                        }
+                        res.add(0, s);
+                        return res;
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {

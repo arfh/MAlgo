@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AlgorithmTest {
@@ -122,6 +124,13 @@ class AlgorithmTest {
         } catch (NegativCycleException e) {
             assertTrue(exception);
         }
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/bfs.csv", numLinesToSkip = 1)
+    void testBreadthFirstSearch(String filename, int s, int t, int length) {
+        Graph g = GraphSupplier.getGraph(filename, true);
+        assertEquals(length, Algorithm.doBreadthFirstSearch(g, g.getNodes().get(s), g.getNodes().get(t)).size());
     }
 }
 
