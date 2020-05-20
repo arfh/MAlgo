@@ -1,5 +1,7 @@
 package ISEMaster;
 
+import com.sun.tools.javac.comp.Flow;
+
 import java.util.*;
 
 public class Algorithm {
@@ -143,13 +145,38 @@ public class Algorithm {
         return tree;
     }
 
-    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {
+    public static FlowGraph EdmondsKarp(Graph g, Node s, Node t){
+        Node v;
+        Node u;
+        FlowGraph fg = new FlowGraph(g);
+        fg.checkIfResidualAndConstructIfNot();
+        Predesessor pre = new Predesessor(g, s);
+
+        while(doBreadthFirstSearch(fg, s, t, pre).size() > 0){
+            double pathFlow = Double.MAX_VALUE;
+            double pathCost = 0;
+
+            for(v=t; v.equals(s) == false; v=pre.getPrevNode(v)){
+                u = pre.getPrevNode(v);
+                try{
+                    pathFlow = Math.min(pathFlow, fg.getEdgeFromNodes(u, v).getCapacity());
+                    pathCost+= fg.getEdgeFromNodes(u, v).getCosts();
+                }catch(EdgeNotFoundException e){
+
+                }
+
+            }
+        }
+
+        return
+    }
+
+    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t, Predesessor pre) {
         ArrayList<Node> res = new ArrayList<>();
         Queue<Node> queue = new LinkedList<>();
         Visited v = new Visited(g.countNodes());
         queue.add(s);
         v.setVisited(s);
-        Predesessor pre = new Predesessor(g, s);
 
         while(!queue.isEmpty()) {
             Node actual = queue.poll();
@@ -172,6 +199,10 @@ public class Algorithm {
             }
         }
         return res;
+    }
+
+    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {
+       return doBreadthFirstSearch(g, s, t , new Predesessor(g, s));
     }
 
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {
@@ -273,8 +304,12 @@ public class Algorithm {
     }
 
     private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
-        Edge tmp = g.getEdgeFromNodes(a, b);
-        r.addEdge(tmp);
+        try{
+            Edge tmp = g.getEdgeFromNodes(a, b);
+            r.addEdge(tmp);
+        }catch(EdgeNotFoundException e){
+
+        }
         return r;
     }
 

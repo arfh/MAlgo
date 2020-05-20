@@ -6,6 +6,7 @@ public class Edge implements Comparable<Edge>{
     private Node a;
     private Node b;
     private Double costs;
+    private Double capacity = 0.0;
 
     public Edge(Node a, Node b) {
         this(a, b, DEF_COSTS);
@@ -56,5 +57,13 @@ public class Edge implements Comparable<Edge>{
 
     public String toString() {
         return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
+    }
+
+    public Double getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Double capacity) {
+        this.capacity = capacity;
     }
 }

@@ -7,9 +7,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Graph {
-    private ArrayList<Node> nodes = new ArrayList<>();
+    protected ArrayList<Node> nodes = new ArrayList<>();
 
     private double totalCosts = 0.0;
+
+    public Graph (Graph g){
+        this.nodes = g.nodes;
+    }
 
     public Graph(File f) throws FileNotFoundException {
         this(f, false);
@@ -99,13 +103,13 @@ public class Graph {
         return res;
     }
 
-    public Edge getEdgeFromNodes(Node a, Node b) {
+    public Edge getEdgeFromNodes(Node a, Node b) throws EdgeNotFoundException {
         for(Edge e: nodes.get(a.getLabel()).getEdges()) {
             if(e.getTarget(a).equals(b)) {
                 return e;
             }
         }
-        return null;
+        throw new EdgeNotFoundException();
     }
 
     public ArrayList<Node> getNodes() {

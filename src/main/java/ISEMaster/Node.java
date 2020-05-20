@@ -22,6 +22,12 @@ public class Node implements Comparable<Node>{
         }
     }
 
+    public void removeEdge(Edge e){
+        if(e != null){
+            edges.remove(e);
+        }
+    }
+
     @Override
     public int compareTo(Node o) {
         return this.label.compareTo(o.label);
