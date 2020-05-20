@@ -2,10 +2,13 @@ package ISEMaster;
 
 public class FlowGraph extends Graph {
     private double maxflow = 0;
-    private double totalcosts = 0;
 
     FlowGraph(Graph g){
         super(g);
+    }
+
+    public void increaseFlow(Double flow) {
+        maxflow += flow;
     }
 
     public void checkIfResidualAndConstructIfNot(){
@@ -13,11 +16,11 @@ public class FlowGraph extends Graph {
             for(Edge e : n.getEdges()){
                 Node a = e.getA();
                 Node b = e.getB();
-
                 try{
                     super.getEdgeFromNodes(b,a);
                 }catch(EdgeNotFoundException ex){
-                    Edge tmp = new Edge(b, a, e.getCosts());
+                    Edge tmp = new Edge(b, a);
+                    tmp.setCapacity(e.getFlow());
                     b.addEdge(tmp);
                 }
 
@@ -25,13 +28,7 @@ public class FlowGraph extends Graph {
         }
     }
 
-    public void removeEdgesWithZeroCapacity(){
-        for(Node n: nodes){
-            for(Edge e: n.getEdges()){
-                if(e.getCosts() <= 0){
-                    n.removeEdge(e);
-                }
-            }
-        }
+    public double getMaxflow() {
+        return maxflow;
     }
 }

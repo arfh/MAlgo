@@ -5,8 +5,9 @@ public class Edge implements Comparable<Edge>{
     public static final Double DEF_COSTS = 1.0;
     private Node a;
     private Node b;
-    private Double costs;
     private Double capacity = 0.0;
+    private Double costs;
+    private Double flow = 0.0;
 
     public Edge(Node a, Node b) {
         this(a, b, DEF_COSTS);
@@ -16,8 +17,13 @@ public class Edge implements Comparable<Edge>{
         this.a = a;
         this.b = b;
         this.costs = costs;
+        this.capacity = costs;
         //a.addEdge(this);
         //b.addEdge(this);
+    }
+
+    public void addFlow(Double x) {
+        this.flow += x;
     }
 
     @Override
@@ -41,8 +47,24 @@ public class Edge implements Comparable<Edge>{
         return b;
     }
 
+    public Double getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Double capacity) {
+        this.capacity = capacity;
+    }
+
     public Double getCosts() {
         return costs;
+    }
+
+    public Double getFlow() {
+        return flow;
+    }
+
+    public void setFlow(Double flow) {
+        this.flow = flow;
     }
 
     public Node getTarget(Node n) {
@@ -57,13 +79,5 @@ public class Edge implements Comparable<Edge>{
 
     public String toString() {
         return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
-    }
-
-    public Double getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Double capacity) {
-        this.capacity = capacity;
     }
 }

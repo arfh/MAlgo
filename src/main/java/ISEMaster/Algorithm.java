@@ -145,44 +145,65 @@ public class Algorithm {
         return tree;
     }
 
-    public static FlowGraph EdmondsKarp(Graph g, Node s, Node t){
+    public static FlowGraph EdmondsKarp(Graph g, Node s, Node t) {
         Node v;
         Node u;
         FlowGraph fg = new FlowGraph(g);
         fg.checkIfResidualAndConstructIfNot();
-        Predesessor pre = new Predesessor(g, s);
+        //Predesessor pre = new Predesessor(g, s);
+        ArrayList<Node> p = doBreadthFirstSearch(fg, s, t);
+        while (p.size() > 0) {
+            // Get Min Capacity from s-t
+            double max_Path_Flow = Double.MAX_VALUE;
+            for (int i = 0; i < p.size() - 1; i++) {
+                Node a = p.get(i);
+                Node b = p.get(i + 1);
 
-        while(doBreadthFirstSearch(fg, s, t, pre).size() > 0){
-            double pathFlow = Double.MAX_VALUE;
-            double pathCost = 0;
-
-            for(v=t; v.equals(s) == false; v=pre.getPrevNode(v)){
-                u = pre.getPrevNode(v);
-                try{
-                    pathFlow = Math.min(pathFlow, fg.getEdgeFromNodes(u, v).getCapacity());
-                    pathCost+= fg.getEdgeFromNodes(u, v).getCosts();
-                }catch(EdgeNotFoundException e){
+                try {
+                    Edge e = fg.getEdgeFromNodes(a, b);
+                    max_Path_Flow = Math.min(e.getCapacity(), max_Path_Flow);
+                } catch (Exception ex) {
 
                 }
-
             }
-        }
 
-        return
+            // Add MaxFlow to all Edges s-t
+            for (int i = 0; i < p.size() - 1; i++) {
+                Node a = p.get(i);
+                Node b = p.get(i + 1);
+
+                try {
+                    // from s-t
+                    Edge e = fg.getEdgeFromNodes(a, b);
+                    e.addFlow(max_Path_Flow);
+                    e.setCapacity(e.getCapacity() - max_Path_Flow);
+
+                    // from t-s
+                    Edge e_rev = fg.getEdgeFromNodes(b, a);
+                    e_rev.setCapacity(e_rev.getCapacity() + max_Path_Flow);
+                } catch (Exception ex) {
+
+                }
+            }
+            fg.increaseFlow(max_Path_Flow);
+            p = doBreadthFirstSearch(fg, s, t);
+        }
+        return fg;
     }
 
-    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t, Predesessor pre) {
+    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {
         ArrayList<Node> res = new ArrayList<>();
         Queue<Node> queue = new LinkedList<>();
         Visited v = new Visited(g.countNodes());
         queue.add(s);
         v.setVisited(s);
+        Predesessor pre = new Predesessor(g, s);
 
         while(!queue.isEmpty()) {
             Node actual = queue.poll();
             for(Edge e: actual.getEdges()) {
                 Node target = e.getTarget(actual);
-                if(v.isNotVisited(target)) {
+                if(v.isNotVisited(target) && e.getCapacity() > 0.0) {
                     v.setVisited(target);
                     queue.add(target);
                     pre.setPrevNode(target, actual);
@@ -199,10 +220,6 @@ public class Algorithm {
             }
         }
         return res;
-    }
-
-    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {
-       return doBreadthFirstSearch(g, s, t , new Predesessor(g, s));
     }
 
     public static ArrayList<ArrayList<Edge>> getDepthFirstSearchTrees(Graph g) {

@@ -132,5 +132,14 @@ class AlgorithmTest {
         Graph g = GraphSupplier.getGraph(filename, true);
         assertEquals(length, Algorithm.doBreadthFirstSearch(g, g.getNodes().get(s), g.getNodes().get(t)).size());
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/edmondsKarp.csv", numLinesToSkip = 1)
+    void testEdmondsKarp(String filename, int s, int t, double flow) {
+        Graph g = GraphSupplier.getGraph(filename, true);
+        FlowGraph fg = Algorithm.EdmondsKarp(g, g.getNodes().get(s), g.getNodes().get(t));
+        System.out.println(fg.getMaxflow());
+        assertEquals(flow, fg.getMaxflow());
+    }
 }
 
