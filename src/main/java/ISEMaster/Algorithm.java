@@ -118,27 +118,20 @@ public class Algorithm {
     public static DijkstraTree djikstra(Graph g, Node s) {
         DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
         Visited v = new Visited(g.countNodes());
-        ArrayList<Node> queue = new ArrayList<>();
-        queue.add(s);
-        while(!queue.isEmpty()) {
-            Node min = null;
-            try {
-                min = tree.getMinDist(queue);
-            } catch (ListIsEmptyException e) {
-                break;
-            }
-            v.setVisited(s);
-            for(Edge e: min.getEdges()) {
+        PriorityQueue<DijkstraQueueEntry> queue = new PriorityQueue<>();
+        queue.add(new DijkstraQueueEntry(s, 0.0));
+        while(v.notAllVisited()) {
+            Node min = queue.poll().getN();
+            v.setVisited(min);
+            for (Edge e : min.getEdges()) {
                 Node target = e.getTarget(min);
-                if(!v.isVisited(target)) {
-                    if (tree.getPrev(target) == null) {
-                        queue.add(target);
-                    }
+                if (!v.isVisited(target)) {
                     double costs = (e.getCosts() + tree.getDist(min));
                     if (tree.getDist(target) > costs) {
                         tree.setPrev(target, min);
                         tree.setDist(target, costs);
                     }
+                    queue.add(new DijkstraQueueEntry(target, tree.getDist(target)));
                 }
             }
         }

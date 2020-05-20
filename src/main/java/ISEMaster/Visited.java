@@ -2,8 +2,8 @@ package ISEMaster;
 
 public class Visited {
 
-    private boolean[] v = null;
     private int counter = 0;
+    private boolean[] v = null;
 
     public Visited(int size) {
         v = new boolean[size];
@@ -13,12 +13,16 @@ public class Visited {
         return v.length == counter;
     }
 
+    public boolean isNotVisited(Node n) {
+        return !isVisited(n);
+    }
+
     public boolean isVisited(Node n) {
         return v[n.getLabel()];
     }
 
-    public boolean isNotVisited(Node n) {
-        return !isVisited(n);
+    public boolean notAllVisited() {
+        return !allVisited();
     }
 
     public void setVisited(Node n) {
