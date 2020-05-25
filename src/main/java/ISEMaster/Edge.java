@@ -22,7 +22,7 @@ public class Edge implements Comparable<Edge>{
         //b.addEdge(this);
     }
 
-    public void addFlow(Double x) {
+    public void increaseFlow(Double x) {
         this.flow += x;
     }
 

@@ -1,7 +1,5 @@
 package ISEMaster;
 
-import com.sun.tools.javac.comp.Flow;
-
 import java.util.*;
 
 public class Algorithm {
@@ -143,9 +141,8 @@ public class Algorithm {
         Node u;
         FlowGraph fg = new FlowGraph(g);
         fg.checkIfResidualAndConstructIfNot();
-        //Predesessor pre = new Predesessor(g, s);
         ArrayList<Node> p = doBreadthFirstSearch(fg, s, t);
-        while (p.size() > 0) {
+        while (!p.isEmpty()) {
             // Get Min Capacity from s-t
             double max_Path_Flow = Double.MAX_VALUE;
             for (int i = 0; i < p.size() - 1; i++) {
@@ -168,7 +165,7 @@ public class Algorithm {
                 try {
                     // from s-t
                     Edge e = fg.getEdgeFromNodes(a, b);
-                    e.addFlow(max_Path_Flow);
+                    e.increaseFlow(max_Path_Flow);
                     e.setCapacity(e.getCapacity() - max_Path_Flow);
 
                     // from t-s
