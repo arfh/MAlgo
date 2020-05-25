@@ -137,8 +137,6 @@ public class Algorithm {
     }
 
     public static FlowGraph EdmondsKarp(Graph g, Node s, Node t) {
-        Node v;
-        Node u;
         FlowGraph fg = new FlowGraph(g);
         fg.checkIfResidualAndConstructIfNot();
         ArrayList<Node> p = doBreadthFirstSearch(fg, s, t);
@@ -165,7 +163,6 @@ public class Algorithm {
                 try {
                     // from s-t
                     Edge e = fg.getEdgeFromNodes(a, b);
-                    e.increaseFlow(max_Path_Flow);
                     e.setCapacity(e.getCapacity() - max_Path_Flow);
 
                     // from t-s
