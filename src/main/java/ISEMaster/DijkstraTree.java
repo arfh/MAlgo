@@ -6,6 +6,10 @@ import java.util.Arrays;
 public class DijkstraTree {
     private double[] dist;
     private Node[] prev;
+    private int status = 0;
+
+    public static final int IS_TREE = 0;
+    public static final int IS_NEGATIVE_CYCLE = 1;
 
     public DijkstraTree(int nodeCount, Node start) {
         dist = new double[nodeCount];
