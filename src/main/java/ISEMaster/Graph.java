@@ -7,9 +7,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Graph {
+    protected boolean directed = false;
     protected ArrayList<Node> nodes = new ArrayList<>();
+    protected double totalCosts = 0.0;
 
-    private double totalCosts = 0.0;
+    public Graph() {
+
+    }
 
     public Graph (Graph g){
         this.nodes = g.nodes;
@@ -36,6 +40,7 @@ public class Graph {
     }
 
     public Graph(File f, boolean directed) throws FileNotFoundException {
+        this.directed = directed;
         if(!f.exists()) {
             throw  new FileNotFoundException("File " + f.getPath() + " not found");
         }
@@ -88,7 +93,10 @@ public class Graph {
         for (Node entry: nodes) {
             edges = edges + entry.getEdges().size();
         }
-        return edges /2;
+        if(!directed) {
+            edges = edges / 2;
+        }
+        return edges;
     }
 
     public Integer countNodes() {
@@ -118,6 +126,10 @@ public class Graph {
 
     public double getTotalCosts() {
         return totalCosts;
+    }
+
+    public void setDirected(boolean directed) {
+        this.directed = directed;
     }
 
     public String toString() {

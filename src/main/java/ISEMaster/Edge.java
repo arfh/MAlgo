@@ -19,8 +19,11 @@ public class Edge implements Comparable<Edge>{
         this.b = b;
         this.costs = costs;
         this.capacity = costs;
-        //a.addEdge(this);
-        //b.addEdge(this);
+    }
+
+    public Edge(Node a, Node b, Double costs, double capacity) {
+        this(a, b, costs);
+        this.capacity = capacity;
     }
 
     public void increaseFlow(Double x) {
