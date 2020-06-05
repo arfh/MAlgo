@@ -1,11 +1,8 @@
 package ISEMaster;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-
-import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,19 +50,14 @@ class AlgorithmTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "/bellmanFord.csv", numLinesToSkip = 1)
-    void testBellmanFord(String filename, int startNode, int tartgetNode, double cost, boolean directed, boolean exception){
+    void testBellmanFord(String filename, int startNode, int tartgetNode, double cost, boolean directed, boolean isNegativCycle){
         Graph g = GraphSupplier.getGraph(filename, directed);
-        try {
-            long start = System.nanoTime();
-            DijkstraTree tree = Algorithm.bellmanFord(g, g.getNodes().get(startNode));
-            long end = System.nanoTime();
-            System.out.println("Time: " + (end - start) / 1000.0 / 1000.0);
-            //System.out.println(tree);
-            assertTrue(cost >= tree.getDist(g.getNodes().get(tartgetNode)));
-            assertTrue(!exception);
-        } catch (NegativCycleException e) {
-            assertTrue(exception);
-        }
+        long start = System.nanoTime();
+        PreviousStructure tree = Algorithm.bellmanFord(g, g.getNodes().get(startNode));
+        long end = System.nanoTime();
+        System.out.println("Time: " + (end - start) / 1000.0 / 1000.0);
+        assertTrue(cost >= tree.getDist(g.getNodes().get(tartgetNode)));
+        assertEquals(isNegativCycle, tree.isNegativeCycle());
     }
 
     @ParameterizedTest
@@ -111,7 +103,7 @@ class AlgorithmTest {
     void testDijkstra(String filename, int startNode, int tartgetNode, double cost, boolean directed){
         Graph g = GraphSupplier.getGraph(filename, directed);
         long start = System.nanoTime();
-        DijkstraTree tree = Algorithm.djikstra(g, g.getNodes().get(startNode));
+        PreviousStructure tree = Algorithm.djikstra(g, g.getNodes().get(startNode));
         long end = System.nanoTime();
         System.out.println("Time: " + (end-start)/1000.0/1000.0);
         //System.out.println(tree);

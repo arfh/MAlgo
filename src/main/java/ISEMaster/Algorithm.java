@@ -110,8 +110,8 @@ public class Algorithm {
         return r;
     }
 
-    public static DijkstraTree bellmanFord(Graph g, Node s) throws NegativCycleException{
-        DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
+    public static PreviousStructure bellmanFord(Graph g, Node s) {
+        PreviousStructure tree = new PreviousStructure(g.countNodes(), s);
         ArrayList<Edge> edges = g.getAllEdges();
         for(int i = 1; i < g.countNodes(); i++) {
             for(Edge e: edges) {
@@ -133,7 +133,8 @@ public class Algorithm {
             double ce = e.getCosts();
             double cw = tree.getDist(e.getB());
             if((cv +ce) < cw) {
-                throw new NegativCycleException();
+                tree.setToNegaticeCyle();
+                return tree;
             }
         }
         return tree;
@@ -156,11 +157,42 @@ public class Algorithm {
     }
 
     public static void cycleCanceling (FlowGraph g){
-        
+        List<Node> sources = g.getSources();
+        List<Node> targets = g.getTargets();
+
+        //Schritt 1
+        Node s = g.addNode();
+        for(Node source: sources) {
+            Edge e = new Edge(s, source, 0.0, source.getBalance());
+            s.addEdge(e);
+        }
+
+        Node t = g.addNode();
+        for(Node target: targets) {
+            Edge e = new Edge(t, target, 0.0, target.getBalance());
+            t.addEdge(e);
+        }
+
+        while(true) {
+            // Schritt 1
+            g = EdmondsKarp(g, s, t);
+            // Schritt 2
+            g.checkIfResidualAndConstructIfNot();
+
+            // Schritt 3
+            PreviousStructure prev = bellmanFord(g, s);
+
+            if (!prev.isNegativeCycle()) {
+                return;
+            }
+
+            // Schritt 4
+
+        }
     }
 
-    public static DijkstraTree djikstra(Graph g, Node s) {
-        DijkstraTree tree = new DijkstraTree(g.countNodes(), s);
+    public static PreviousStructure djikstra(Graph g, Node s) {
+        PreviousStructure tree = new PreviousStructure(g.countNodes(), s);
         Visited v = new Visited(g.countNodes());
         PriorityQueue<DijkstraQueueEntry> queue = new PriorityQueue<>();
         queue.add(new DijkstraQueueEntry(s, 0.0));

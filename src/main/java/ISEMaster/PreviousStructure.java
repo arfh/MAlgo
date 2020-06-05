@@ -3,15 +3,15 @@ package ISEMaster;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DijkstraTree {
+public class PreviousStructure {
+    public static final int IS_NEGATIVE_CYCLE = 1;
+    public static final int IS_TREE = 0;
+
     private double[] dist;
     private Node[] prev;
-    private int status = 0;
+    private int status = IS_TREE;
 
-    public static final int IS_TREE = 0;
-    public static final int IS_NEGATIVE_CYCLE = 1;
-
-    public DijkstraTree(int nodeCount, Node start) {
+    public PreviousStructure(int nodeCount, Node start) {
         dist = new double[nodeCount];
         Arrays.fill(dist, Double.POSITIVE_INFINITY);
 
@@ -22,20 +22,8 @@ public class DijkstraTree {
         setPrev(start, start);
     }
 
-    public void setDist(Node n, double c) {
-        dist[n.getLabel()] = c;
-    }
-
     public double getDist(Node n) {
         return dist[n.getLabel()];
-    }
-
-    public void setPrev(Node n, Node prevNode) {
-        prev[n.getLabel()] = prevNode;
-    }
-
-    public Node getPrev(Node n) {
-        return prev[n.getLabel()];
     }
 
     public Node getMinDist(ArrayList<Node> unvisisted) throws ListIsEmptyException{
@@ -53,6 +41,26 @@ public class DijkstraTree {
         }
         unvisisted.remove(pos);
         return min;
+    }
+
+    public Node getPrev(Node n) {
+        return prev[n.getLabel()];
+    }
+
+    public boolean isNegativeCycle() {
+        return status == IS_NEGATIVE_CYCLE;
+    }
+
+    public void setDist(Node n, double c) {
+        dist[n.getLabel()] = c;
+    }
+
+    public void setPrev(Node n, Node prevNode) {
+        prev[n.getLabel()] = prevNode;
+    }
+
+    public void setToNegaticeCyle() {
+        status = IS_NEGATIVE_CYCLE;
     }
 
     public String toString() {

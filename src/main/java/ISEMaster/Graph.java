@@ -81,6 +81,12 @@ public class Graph {
         }
     }
 
+    public Node addNode() {
+        Node n = new Node(nodes.size());
+        nodes.add(n);
+        return n;
+    }
+
     public boolean containsNode(Node n) {
         if(nodes.size() > n.getLabel()){
             return nodes.get(n.getLabel()).equals(n);
