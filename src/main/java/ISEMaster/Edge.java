@@ -8,6 +8,7 @@ public class Edge implements Comparable<Edge>{
     private Double capacity = 0.0;
     private Double costs;
     private Double flow = 0.0;
+    private boolean isResidualEdge = false;
 
     public Edge(Node a, Node b) {
         this(a, b, DEF_COSTS);
@@ -79,5 +80,13 @@ public class Edge implements Comparable<Edge>{
 
     public String toString() {
         return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
+    }
+
+    public boolean isResidualEdge() {
+        return isResidualEdge;
+    }
+
+    public void setResidualEdge(boolean residualEdge) {
+        isResidualEdge = residualEdge;
     }
 }
