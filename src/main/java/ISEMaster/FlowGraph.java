@@ -4,9 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 public class FlowGraph extends Graph {
     private double maxflow = 0;
+
+    private ArrayList<Node> sources = new ArrayList<>();
+    private ArrayList<Node> targets = new ArrayList<>();
 
     public FlowGraph(File f) throws FileNotFoundException {
         if(!f.exists()) {
@@ -26,7 +30,13 @@ public class FlowGraph extends Graph {
 
             for(Node n: nodes) {
                 line = br.readLine();
+                Double balance = Double.parseDouble(line);
                 n.setBalance(Double.parseDouble(line));
+                if(balance > 0.0) {
+                    sources.add(n);
+                } else if(balance < 0.0) {
+                    targets.add(n);
+                }
             }
 
             while((line = br.readLine()) != null){
