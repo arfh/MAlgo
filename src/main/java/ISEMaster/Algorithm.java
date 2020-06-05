@@ -38,6 +38,48 @@ public class Algorithm {
         return r;
     }
 
+    public static FlowGraph EdmondsKarp(Graph g, Node s, Node t) {
+        FlowGraph fg = new FlowGraph(g);
+        fg.checkIfResidualAndConstructIfNot();
+        ArrayList<Node> p = doBreadthFirstSearch(fg, s, t);
+        while (!p.isEmpty()) {
+            // Get Min Capacity from s-t
+            double max_Path_Flow = Double.MAX_VALUE;
+            for (int i = 0; i < p.size() - 1; i++) {
+                Node a = p.get(i);
+                Node b = p.get(i + 1);
+
+                try {
+                    Edge e = fg.getEdgeFromNodes(a, b);
+                    max_Path_Flow = Math.min(e.getCapacity(), max_Path_Flow);
+                } catch (Exception ex) {
+
+                }
+            }
+
+            // Add MaxFlow to all Edges s-t
+            for (int i = 0; i < p.size() - 1; i++) {
+                Node a = p.get(i);
+                Node b = p.get(i + 1);
+
+                try {
+                    // from s-t
+                    Edge e = fg.getEdgeFromNodes(a, b);
+                    e.setCapacity(e.getCapacity() - max_Path_Flow);
+
+                    // from t-s
+                    Edge e_rev = fg.getEdgeFromNodes(b, a);
+                    e_rev.setCapacity(e_rev.getCapacity() + max_Path_Flow);
+                } catch (Exception ex) {
+
+                }
+            }
+            fg.increaseFlow(max_Path_Flow);
+            p = doBreadthFirstSearch(fg, s, t);
+        }
+        return fg;
+    }
+
     public static Route NNA(Graph g, Node s) {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         Route r = new Route();
@@ -113,8 +155,8 @@ public class Algorithm {
         return cheapest;
     }
 
-    public static void cycleCanceling (Graph g, ArrayList<Node> startNodes, ArrayList<Node> endNodes){
-
+    public static void cycleCanceling (FlowGraph g){
+        
     }
 
     public static DijkstraTree djikstra(Graph g, Node s) {
@@ -138,48 +180,6 @@ public class Algorithm {
             }
         }
         return tree;
-    }
-
-    public static FlowGraph EdmondsKarp(Graph g, Node s, Node t) {
-        FlowGraph fg = new FlowGraph(g);
-        fg.checkIfResidualAndConstructIfNot();
-        ArrayList<Node> p = doBreadthFirstSearch(fg, s, t);
-        while (!p.isEmpty()) {
-            // Get Min Capacity from s-t
-            double max_Path_Flow = Double.MAX_VALUE;
-            for (int i = 0; i < p.size() - 1; i++) {
-                Node a = p.get(i);
-                Node b = p.get(i + 1);
-
-                try {
-                    Edge e = fg.getEdgeFromNodes(a, b);
-                    max_Path_Flow = Math.min(e.getCapacity(), max_Path_Flow);
-                } catch (Exception ex) {
-
-                }
-            }
-
-            // Add MaxFlow to all Edges s-t
-            for (int i = 0; i < p.size() - 1; i++) {
-                Node a = p.get(i);
-                Node b = p.get(i + 1);
-
-                try {
-                    // from s-t
-                    Edge e = fg.getEdgeFromNodes(a, b);
-                    e.setCapacity(e.getCapacity() - max_Path_Flow);
-
-                    // from t-s
-                    Edge e_rev = fg.getEdgeFromNodes(b, a);
-                    e_rev.setCapacity(e_rev.getCapacity() + max_Path_Flow);
-                } catch (Exception ex) {
-
-                }
-            }
-            fg.increaseFlow(max_Path_Flow);
-            p = doBreadthFirstSearch(fg, s, t);
-        }
-        return fg;
     }
 
     public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {

@@ -67,10 +67,6 @@ public class FlowGraph extends Graph {
         super(g);
     }
 
-    public void increaseFlow(Double flow) {
-        maxflow += flow;
-    }
-
     public void checkIfResidualAndConstructIfNot(){
         for(Node n : this.nodes){
             for(Edge e : n.getEdges()){
@@ -94,4 +90,17 @@ public class FlowGraph extends Graph {
     public double getMaxflow() {
         return maxflow;
     }
-}
+
+    public ArrayList<Node> getSources() {
+        return sources;
+    }
+
+    public ArrayList<Node> getTargets() {
+        return targets;
+    }
+
+    public void increaseFlow(Double flow) {
+        maxflow += flow;
+    }
+
+    }
