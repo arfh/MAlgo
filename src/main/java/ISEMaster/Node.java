@@ -7,6 +7,7 @@ public class Node implements Comparable<Node>{
 
     private ArrayList<Edge> edges = new ArrayList<>();
     private Integer label;
+    private double balance;
 
     public Node(Integer label) {
         this.label = label;
@@ -60,5 +61,13 @@ public class Node implements Comparable<Node>{
 
     public String toString() {
         return label + " " + edges.toString();
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }
