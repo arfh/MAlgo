@@ -82,8 +82,8 @@ public class FlowGraph extends Graph {
                         Edge back = super.getEdgeFromNodes(b,a);
                         back.setCapacity(e.getFlow());
                     }catch(EdgeNotFoundException ex){
-                        Edge tmp = new Edge(b, a);
-                        tmp.setCapacity(e.getFlow());
+                        Edge tmp = new Edge(b, a, -e.getCosts(), e.getFlow());
+                        //tmp.setCapacity(e.getFlow());
                         b.addEdge(tmp);
                         tmp.setResidualEdge(true);
                     }

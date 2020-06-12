@@ -117,16 +117,13 @@ public class Algorithm {
         ArrayList<Edge> edges = g.getAllEdges();
         for(int i = 1; i < g.countNodes(); i++) {
             for(Edge e: edges) {
-                if(e.isResidualEdge()) {
-                    continue;
-                }
                 Node v = e.getA();
                 Node w = e.getB();
                 Double ce = e.getCosts();
                 double cw = tree.getDist(w);
                 double tmpc = tree.getDist(v) + ce;
 
-                if(tmpc < cw) {
+                if(tmpc < cw && !tree.getPrev(v).equals(w)) {
                     tree.setDist(w, tmpc);
                     tree.setPrev(w, v);
                 }
@@ -170,6 +167,7 @@ public class Algorithm {
         for(Node source: sources) {
             Edge e = new Edge(superS, source, 0.0, source.getBalance());
             superS.addEdge(e);
+            superS.setBalance(superS.getBalance() + source.getBalance());
         }
 
         Node superT = g.addNode();
@@ -180,6 +178,8 @@ public class Algorithm {
             }
             Edge e = new Edge(target, superT, 0.0, cap);
             target.addEdge(e);
+
+            superT.setBalance(superT.getBalance() + target.getBalance());
         }
 
         // Schritt 1
