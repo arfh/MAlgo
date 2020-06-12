@@ -43,6 +43,40 @@ public class PreviousStructure {
         return min;
     }
 
+    public ArrayList<Node> getNegativeCycle(Node t) {
+        ArrayList<Node> cycle = new ArrayList<>();
+        if(isNegativeCycle()) {
+            Visited v = new Visited(prev.length);
+            ArrayList<Node> q = new ArrayList();
+            q.add(t);
+            Node cycleBegin = null;
+            while(!q.isEmpty()) {
+                Node tmp = q.remove(0);
+                if(v.isVisited(tmp)) {
+                    cycleBegin = tmp;
+                    break;
+                }
+                q.add(getPrev(tmp));
+                v.setVisited(tmp);
+            }
+
+            q.clear();
+            q.add(getPrev(cycleBegin));
+            cycle.add(0, cycleBegin);
+            while(!q.isEmpty()) {
+                Node tmp = q.remove(0);
+                if(tmp.equals(cycleBegin)) {
+                    cycle.add(0, cycleBegin);
+                    break;
+                } else {
+                    cycle.add(0, tmp);
+                    q.add(getPrev(tmp));
+                }
+            }
+        }
+        return cycle;
+    }
+
     public Node getPrev(Node n) {
         return prev[n.getLabel()];
     }

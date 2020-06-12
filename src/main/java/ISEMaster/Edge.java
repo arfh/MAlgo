@@ -26,13 +26,23 @@ public class Edge implements Comparable<Edge>{
         this.capacity = capacity;
     }
 
-    public void increaseFlow(Double x) {
-        this.flow += x;
-    }
-
     @Override
     public int compareTo(Edge o) {
         return this.costs.compareTo(o.costs);
+    }
+
+    public void decreaseCapacity(Double x) {
+        capacity = capacity - x;
+        if(capacity < 0.0) {
+            capacity = 0.0;
+        }
+    }
+
+    public void decreaseFlow(Double x) {
+        flow = flow - x;
+        if(flow < 0.0) {
+            flow = 0.0;
+        }
     }
 
     public boolean equals(Object o) {
@@ -81,8 +91,12 @@ public class Edge implements Comparable<Edge>{
         }
     }
 
-    public String toString() {
-        return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + "]";
+    public void increaseCapacity(Double minCapacity) {
+        capacity += minCapacity;
+    }
+
+    public void increaseFlow(Double x) {
+        this.flow += x;
     }
 
     public boolean isResidualEdge() {
@@ -91,5 +105,9 @@ public class Edge implements Comparable<Edge>{
 
     public void setResidualEdge(boolean residualEdge) {
         isResidualEdge = residualEdge;
+    }
+
+    public String toString() {
+        return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + ", " + flow + ", " + capacity + "]";
     }
 }

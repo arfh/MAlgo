@@ -65,6 +65,11 @@ public class FlowGraph extends Graph {
 
     FlowGraph(Graph g){
         super(g);
+        if(g instanceof FlowGraph) {
+            sources = ((FlowGraph) g).sources;
+            targets = ((FlowGraph) g).targets;
+            maxflow = ((FlowGraph) g).maxflow;
+        }
     }
 
     public void checkIfResidualAndConstructIfNot(){

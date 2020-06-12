@@ -17,6 +17,7 @@ public class Graph {
 
     public Graph (Graph g){
         this.nodes = g.nodes;
+        this.directed = g.directed;
     }
 
     public Graph(File f) throws FileNotFoundException {

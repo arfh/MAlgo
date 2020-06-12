@@ -65,10 +65,12 @@ public class Algorithm {
                 try {
                     // from s-t
                     Edge e = fg.getEdgeFromNodes(a, b);
+                    e.increaseFlow(max_Path_Flow);
                     e.setCapacity(e.getCapacity() - max_Path_Flow);
 
                     // from t-s
                     Edge e_rev = fg.getEdgeFromNodes(b, a);
+                    e_rev.decreaseFlow(max_Path_Flow);
                     e_rev.setCapacity(e_rev.getCapacity() + max_Path_Flow);
                 } catch (Exception ex) {
 
@@ -115,6 +117,9 @@ public class Algorithm {
         ArrayList<Edge> edges = g.getAllEdges();
         for(int i = 1; i < g.countNodes(); i++) {
             for(Edge e: edges) {
+                if(e.isResidualEdge()) {
+                    continue;
+                }
                 Node v = e.getA();
                 Node w = e.getB();
                 Double ce = e.getCosts();
@@ -161,33 +166,70 @@ public class Algorithm {
         List<Node> targets = g.getTargets();
 
         //Schritt 1
-        Node s = g.addNode();
+        Node superS = g.addNode();
         for(Node source: sources) {
-            Edge e = new Edge(s, source, 0.0, source.getBalance());
-            s.addEdge(e);
+            Edge e = new Edge(superS, source, 0.0, source.getBalance());
+            superS.addEdge(e);
         }
 
-        Node t = g.addNode();
+        Node superT = g.addNode();
         for(Node target: targets) {
-            Edge e = new Edge(t, target, 0.0, target.getBalance());
-            t.addEdge(e);
+            Double cap = target.getBalance();
+            if(cap < 0) {
+                cap = cap * (-1.0);
+            }
+            Edge e = new Edge(target, superT, 0.0, cap);
+            target.addEdge(e);
         }
+
+        // Schritt 1
+        g = EdmondsKarp(g, superS, superT);
 
         while(true) {
-            // Schritt 1
-            g = EdmondsKarp(g, s, t);
             // Schritt 2
             g.checkIfResidualAndConstructIfNot();
 
             // Schritt 3
-            PreviousStructure prev = bellmanFord(g, s);
+            PreviousStructure prev = bellmanFord(g, superS);
 
             if (!prev.isNegativeCycle()) {
                 return;
             }
 
             // Schritt 4
+            ArrayList<Node> negativeCycle = prev.getNegativeCycle(superT);
+            // Suche min Kapazität entlang des Cycles
+            Double minCapacity = Double.POSITIVE_INFINITY;
+            for(int i = 0; i < negativeCycle.size() -1; i++) {
+                Node a = negativeCycle.get(i);
+                Node b = negativeCycle.get(i+1);
 
+                Edge e = null;
+                try {
+                    e = g.getEdgeFromNodes(a, b);
+                    minCapacity = Math.min(minCapacity, e.getCapacity());
+                } catch (EdgeNotFoundException ex) {
+
+                }
+            }
+
+            for(int i = 0; i < negativeCycle.size() -1; i++) {
+                Node a = negativeCycle.get(i);
+                Node b = negativeCycle.get(i+1);
+
+                Edge e = null;
+                Edge rev = null;
+                try {
+                    e = g.getEdgeFromNodes(a, b);
+                    rev = g.getEdgeFromNodes(b, a);
+                } catch (EdgeNotFoundException ex) {}
+
+                e.increaseFlow(minCapacity);
+                e.decreaseCapacity(minCapacity);
+
+                rev.increaseCapacity(minCapacity);
+
+            }
         }
     }
 

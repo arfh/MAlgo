@@ -4,6 +4,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AlgorithmTest {
@@ -132,5 +134,19 @@ class AlgorithmTest {
         System.out.println(r);
         System.out.println(r.totalCosts());
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/costmin.csv", numLinesToSkip = 1)
+    void testCCA(String filename, Double mincosts) {
+        try {
+            FlowGraph g = new FlowGraph(new File(filename));
+            Algorithm.cycleCanceling(g);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+
 }
 
