@@ -10,6 +10,8 @@ public class Edge implements Comparable<Edge>{
     private Double flow = 0.0;
     private boolean isResidualEdge = false;
 
+    private double originalCosts;
+
     public Edge(Node a, Node b) {
         this(a, b, DEF_COSTS);
     }
@@ -19,6 +21,7 @@ public class Edge implements Comparable<Edge>{
         this.b = b;
         this.costs = costs;
         this.capacity = costs;
+        this.originalCosts = costs;
     }
 
     public Edge(Node a, Node b, Double costs, double capacity) {
@@ -35,6 +38,7 @@ public class Edge implements Comparable<Edge>{
         capacity = capacity - x;
         if(capacity < 0.0) {
             capacity = 0.0;
+            costs = Double.POSITIVE_INFINITY;
         }
     }
 
@@ -67,6 +71,13 @@ public class Edge implements Comparable<Edge>{
 
     public void setCapacity(Double capacity) {
         this.capacity = capacity;
+        if(capacity <= 0){
+            costs = Double.POSITIVE_INFINITY;
+        }
+    }
+
+    public double getOriginalCosts(){
+        return originalCosts;
     }
 
     public Double getCosts() {
@@ -92,6 +103,9 @@ public class Edge implements Comparable<Edge>{
     }
 
     public void increaseCapacity(Double minCapacity) {
+        if(capacity > 0){
+            costs = originalCosts;
+        }
         capacity += minCapacity;
     }
 
@@ -108,6 +122,6 @@ public class Edge implements Comparable<Edge>{
     }
 
     public String toString() {
-        return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + ", " + flow + ", " + capacity + "]";
+        return "[" + a.getLabel() + " - " + b.getLabel() + ", " + costs + ", " + flow + ", " + capacity + ", " + getOriginalCosts() + ", " + isResidualEdge +  "]";
     }
 }

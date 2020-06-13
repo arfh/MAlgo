@@ -186,57 +186,64 @@ public class Algorithm {
         g = EdmondsKarp(g, superS, superT);
 
         if(g.getMaxflow() == superS.getBalance() && -g.getMaxflow() == superT.getBalance()){
-            for(Node n: g.getNodes()){
+            boolean ready = false;
 
-                // Schritt 2
-                //g.checkIfResidualAndConstructIfNot();
+            while(!ready){
+                for(Node n: g.getNodes()){
 
-                // Schritt 3
-                PreviousStructure prev = bellmanFord(g, n);
+                    // Schritt 2
+                    //g.checkIfResidualAndConstructIfNot();
 
-                if (!prev.isNegativeCycle()) {
-                    return -1;
-                }
+                    // Schritt 3
+                    PreviousStructure prev = bellmanFord(g, n);
 
-                // Schritt 4
-                ArrayList<Node> negativeCycle = prev.getNegativeCycle(n);
-                // Suche min Kapazität entlang des Cycles
-                Double minCapacity = Double.POSITIVE_INFINITY;
-                for(int i = 0; i < negativeCycle.size() -1; i++) {
-                    Node a = negativeCycle.get(i);
-                    Node b = negativeCycle.get(i+1);
+                    if (!prev.isNegativeCycle()) {
+                        ready = true;
+                        break;
+                    }
 
-                    Edge e = null;
-                    try {
-                        e = g.getEdgeFromNodes(a, b);
-                        minCapacity = Math.min(minCapacity, e.getCapacity());
-                    } catch (EdgeNotFoundException ex) {
+                    // Schritt 4
+                    ArrayList<Node> negativeCycle = prev.getNegativeCycle(n);
+                    // Suche min Kapazität entlang des Cycles
+                    Double minCapacity = Double.POSITIVE_INFINITY;
+                    for(int i = 0; i < negativeCycle.size() -1; i++) {
+                        Node a = negativeCycle.get(i);
+                        Node b = negativeCycle.get(i+1);
 
+                        Edge e = null;
+                        try {
+                            e = g.getEdgeFromNodes(a, b);
+                            minCapacity = Math.min(minCapacity, e.getCapacity());
+                        } catch (EdgeNotFoundException ex) {
+
+                        }
+                    }
+
+
+                    for(int i = 0; i < negativeCycle.size() -1; i++) {
+                        Node a = negativeCycle.get(i);
+                        Node b = negativeCycle.get(i+1);
+
+                        Edge e = null;
+                        Edge rev = null;
+                        try {
+                            e = g.getEdgeFromNodes(a, b);
+                            rev = g.getEdgeFromNodes(b, a);
+                        } catch (EdgeNotFoundException ex) {}
+
+                        e.increaseFlow(minCapacity);
+                        e.decreaseCapacity(minCapacity);
+
+                        rev.increaseCapacity(minCapacity);
                     }
                 }
-
-                for(int i = 0; i < negativeCycle.size() -1; i++) {
-                    Node a = negativeCycle.get(i);
-                    Node b = negativeCycle.get(i+1);
-
-                    Edge e = null;
-                    Edge rev = null;
-                    try {
-                        e = g.getEdgeFromNodes(a, b);
-                        rev = g.getEdgeFromNodes(b, a);
-                    } catch (EdgeNotFoundException ex) {}
-
-                    e.increaseFlow(minCapacity);
-                    e.decreaseCapacity(minCapacity);
-
-                    rev.increaseCapacity(minCapacity);
-                }
             }
+
 
             double costs = 0;
             for(Edge e: g.getAllEdges()){
                 if(!e.isResidualEdge()){
-                    costs+= (e.getCosts()*e.getFlow());
+                    costs+= (e.getOriginalCosts()*e.getFlow());
                 }
             }
 

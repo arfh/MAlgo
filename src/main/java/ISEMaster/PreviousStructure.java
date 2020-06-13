@@ -1,7 +1,9 @@
 package ISEMaster;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 public class PreviousStructure {
     public static final int IS_NEGATIVE_CYCLE = 1;
@@ -10,13 +12,14 @@ public class PreviousStructure {
     private double[] dist;
     private Node[] prev;
     private int status = IS_TREE;
+    private ArrayList<Node> negativeCycle = null;
+
 
     public PreviousStructure(int nodeCount, Node start) {
         dist = new double[nodeCount];
         Arrays.fill(dist, Double.POSITIVE_INFINITY);
 
         prev = new Node[nodeCount];
-
 
         setDist(start, 0.0);
         setPrev(start, start);
@@ -44,6 +47,9 @@ public class PreviousStructure {
     }
 
     public ArrayList<Node> getNegativeCycle(Node t) {
+        if(negativeCycle != null){
+            return negativeCycle;
+        }
         ArrayList<Node> cycle = new ArrayList<>();
         if(isNegativeCycle()) {
             Visited v = new Visited(prev.length);
@@ -73,8 +79,9 @@ public class PreviousStructure {
                     q.add(getPrev(tmp));
                 }
             }
-        }
 
+        }
+        negativeCycle = cycle;
         return cycle;
     }
 
