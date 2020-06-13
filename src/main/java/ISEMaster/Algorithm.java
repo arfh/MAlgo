@@ -231,6 +231,7 @@ public class Algorithm {
                             rev = g.getEdgeFromNodes(b, a);
                         } catch (EdgeNotFoundException ex) {}
 
+
                         e.increaseFlow(minCapacity);
                         e.decreaseCapacity(minCapacity);
 

@@ -14,6 +14,12 @@ public class PreviousStructure {
     private int status = IS_TREE;
     private ArrayList<Node> negativeCycle = null;
 
+    private double minCapacity = Double.POSITIVE_INFINITY;
+
+    public double getMinCapacity(){
+        return minCapacity;
+    }
+
 
     public PreviousStructure(int nodeCount, Node start) {
         dist = new double[nodeCount];
@@ -46,7 +52,7 @@ public class PreviousStructure {
         return min;
     }
 
-    public ArrayList<Node> getNegativeCycle(Node t) {
+    public ArrayList<Node> getNegativeCycle(Node t, Graph g) {
         if(negativeCycle != null){
             return negativeCycle;
         }
@@ -77,6 +83,19 @@ public class PreviousStructure {
                 } else {
                     cycle.add(0, tmp);
                     q.add(getPrev(tmp));
+                }
+            }
+
+            for(int i = 0; i < cycle.size() -1; i++) {
+                Node a = cycle.get(i);
+                Node b = cycle.get(i+1);
+
+                Edge e = null;
+                try {
+                    e = g.getEdgeFromNodes(a, b);
+                    minCapacity = Math.min(minCapacity, e.getCapacity());
+                } catch (EdgeNotFoundException ex) {
+
                 }
             }
 
