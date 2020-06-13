@@ -74,6 +74,7 @@ public class PreviousStructure {
                 }
             }
         }
+
         return cycle;
     }
 

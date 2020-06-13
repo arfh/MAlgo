@@ -140,7 +140,10 @@ class AlgorithmTest {
     void testCCA(String filename, Double mincosts) {
         try {
             FlowGraph g = new FlowGraph(new File(filename));
-            Algorithm.cycleCanceling(g);
+            double cost = Algorithm.cycleCanceling(g);
+            assertEquals(mincosts, cost);
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
             assertTrue(false);
