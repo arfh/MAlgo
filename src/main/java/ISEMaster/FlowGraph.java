@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class FlowGraph extends Graph {
     private double maxflow = 0;
-
     private ArrayList<Node> sources = new ArrayList<>();
     private ArrayList<Node> targets = new ArrayList<>();
+    private double totalMinMaxFlowCosts = 0.0;
 
     public FlowGraph(File f) throws FileNotFoundException {
         if(!f.exists()) {
@@ -104,8 +104,20 @@ public class FlowGraph extends Graph {
         return targets;
     }
 
+    public double getTotalMinMaxFlowCosts() {
+        return totalMinMaxFlowCosts;
+    }
+
+    public void increaseTotalMinMaxFlowCosts(Double x) {
+        totalMinMaxFlowCosts += x;
+    }
+
+    public void increaseTotalCosts(Double costs) {
+        totalCosts += costs;
+    }
+
     public void increaseFlow(Double flow) {
         maxflow += flow;
     }
 
-    }
+}

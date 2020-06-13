@@ -117,15 +117,17 @@ public class Algorithm {
         ArrayList<Edge> edges = g.getAllEdges();
         for(int i = 1; i < g.countNodes(); i++) {
             for(Edge e: edges) {
-                Node v = e.getA();
-                Node w = e.getB();
-                Double ce = e.getCosts();
-                double cw = tree.getDist(w);
-                double tmpc = tree.getDist(v) + ce;
+                if(e.getCapacity() > 0.0 && tree.getDist(e.getA()) + e.getCosts() < tree.getDist(e.getB())) {
+                    Node v = e.getA();
+                    Node w = e.getB();
+                    Double ce = e.getCosts();
+                    double cw = tree.getDist(w);
+                    double tmpc = tree.getDist(v) + ce;
 
-                if(tmpc < cw && !tree.getPrev(v).equals(w)) {
-                    tree.setDist(w, tmpc);
-                    tree.setPrev(w, v);
+                    if (tmpc < cw && !tree.getPrev(v).equals(w)) {
+                        tree.setDist(w, tmpc);
+                        tree.setPrev(w, v);
+                    }
                 }
             }
         }
@@ -136,6 +138,7 @@ public class Algorithm {
             double cw = tree.getDist(e.getB());
             if((cv +ce) < cw) {
                 tree.setToNegaticeCyle();
+                tree.constructNegativCycle(e.getA(), g);
                 return tree;
             }
         }
@@ -187,15 +190,13 @@ public class Algorithm {
 
         if(g.getMaxflow() == superS.getBalance() && -g.getMaxflow() == superT.getBalance()){
             boolean ready = false;
-
-            while(!ready){
-                for(Node n: g.getNodes()){
-
-                    // Schritt 2
-                    //g.checkIfResidualAndConstructIfNot();
+            while(!ready) {
+                for (Node n : g.getNodes()) {
 
                     // Schritt 3
                     PreviousStructure prev = bellmanFord(g, n);
+
+                    ArrayList<Edge> negativeCycle = prev.getNegativeCycle();
 
                     if (!prev.isNegativeCycle()) {
                         ready = true;
@@ -203,52 +204,19 @@ public class Algorithm {
                     }
 
                     // Schritt 4
-                    ArrayList<Node> negativeCycle = prev.getNegativeCycle(n);
-                    // Suche min Kapazität entlang des Cycles
-                    Double minCapacity = Double.POSITIVE_INFINITY;
-                    for(int i = 0; i < negativeCycle.size() -1; i++) {
-                        Node a = negativeCycle.get(i);
-                        Node b = negativeCycle.get(i+1);
+                    Double minCapacity = prev.getMinNegativCylcleCapacity();
 
-                        Edge e = null;
-                        try {
-                            e = g.getEdgeFromNodes(a, b);
-                            minCapacity = Math.min(minCapacity, e.getCapacity());
-                        } catch (EdgeNotFoundException ex) {
-
-                        }
-                    }
-
-
-                    for(int i = 0; i < negativeCycle.size() -1; i++) {
-                        Node a = negativeCycle.get(i);
-                        Node b = negativeCycle.get(i+1);
-
-                        Edge e = null;
-                        Edge rev = null;
-                        try {
-                            e = g.getEdgeFromNodes(a, b);
-                            rev = g.getEdgeFromNodes(b, a);
-                        } catch (EdgeNotFoundException ex) {}
-
-
-                        e.increaseFlow(minCapacity);
+                    for(Edge e: negativeCycle) {
                         e.decreaseCapacity(minCapacity);
-
-                        rev.increaseCapacity(minCapacity);
+                        try {
+                            Edge rev = g.getEdgeFromNodes(e.getB(), e.getA());
+                            rev.increaseCapacity(minCapacity);
+                        } catch (EdgeNotFoundException edgeNotFoundException) {}
                     }
+                    g.increaseTotalMinMaxFlowCosts(prev.getTotalNegativeCycleCosts() * prev.getMinNegativCylcleCapacity());
                 }
             }
-
-
-            double costs = 0;
-            for(Edge e: g.getAllEdges()){
-                if(!e.isResidualEdge()){
-                    costs+= (e.getOriginalCosts()*e.getFlow());
-                }
-            }
-
-            return costs;
+            return g.getTotalMinMaxFlowCosts();
         }
         else{
             return -1;

@@ -10,16 +10,11 @@ public class PreviousStructure {
     public static final int IS_TREE = 0;
 
     private double[] dist;
+    private double minNegativCylcleCapacity = Double.POSITIVE_INFINITY;
+    private ArrayList<Edge> negativeCycle = null;
     private Node[] prev;
     private int status = IS_TREE;
-    private ArrayList<Node> negativeCycle = null;
-
-    private double minCapacity = Double.POSITIVE_INFINITY;
-
-    public double getMinCapacity(){
-        return minCapacity;
-    }
-
+    private double totalNegativeCycleCosts = 0.0;
 
     public PreviousStructure(int nodeCount, Node start) {
         dist = new double[nodeCount];
@@ -31,8 +26,40 @@ public class PreviousStructure {
         setPrev(start, start);
     }
 
+    public void constructNegativCycle(Node currentNode, Graph g) {
+
+        for(int i = 0; i < g.countNodes(); i++) {
+            currentNode = prev[currentNode.getLabel()];
+        }
+
+        negativeCycle = new ArrayList<>();
+        if(isNegativeCycle()) {
+            Node start = currentNode;
+            while(getPrev(currentNode).equals(start) == false) {
+                try {
+                    Edge e = g.getEdgeFromNodes(getPrev(currentNode), currentNode);
+                    negativeCycle.add(e);
+                    totalNegativeCycleCosts += e.getCosts();
+                    minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
+                    currentNode = getPrev(currentNode);
+                } catch(EdgeNotFoundException ex) {}
+            }
+            try {
+                Edge e = g.getEdgeFromNodes(getPrev(currentNode), currentNode);
+                negativeCycle.add(e);
+                totalNegativeCycleCosts += e.getCosts();
+                minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
+            } catch (EdgeNotFoundException edgeNotFoundException) {
+            }
+        }
+    }
+
     public double getDist(Node n) {
         return dist[n.getLabel()];
+    }
+
+    public double getMinNegativCylcleCapacity(){
+        return minNegativCylcleCapacity;
     }
 
     public Node getMinDist(ArrayList<Node> unvisisted) throws ListIsEmptyException{
@@ -52,60 +79,16 @@ public class PreviousStructure {
         return min;
     }
 
-    public ArrayList<Node> getNegativeCycle(Node t, Graph g) {
-        if(negativeCycle != null){
-            return negativeCycle;
-        }
-        ArrayList<Node> cycle = new ArrayList<>();
-        if(isNegativeCycle()) {
-            Visited v = new Visited(prev.length);
-            ArrayList<Node> q = new ArrayList();
-            q.add(t);
-            Node cycleBegin = null;
-            while(!q.isEmpty()) {
-                Node tmp = q.remove(0);
-                if(v.isVisited(tmp)) {
-                    cycleBegin = tmp;
-                    break;
-                }
-                q.add(getPrev(tmp));
-                v.setVisited(tmp);
-            }
-
-            q.clear();
-            q.add(getPrev(cycleBegin));
-            cycle.add(0, cycleBegin);
-            while(!q.isEmpty()) {
-                Node tmp = q.remove(0);
-                if(tmp.equals(cycleBegin)) {
-                    cycle.add(0, cycleBegin);
-                    break;
-                } else {
-                    cycle.add(0, tmp);
-                    q.add(getPrev(tmp));
-                }
-            }
-
-            for(int i = 0; i < cycle.size() -1; i++) {
-                Node a = cycle.get(i);
-                Node b = cycle.get(i+1);
-
-                Edge e = null;
-                try {
-                    e = g.getEdgeFromNodes(a, b);
-                    minCapacity = Math.min(minCapacity, e.getCapacity());
-                } catch (EdgeNotFoundException ex) {
-
-                }
-            }
-
-        }
-        negativeCycle = cycle;
-        return cycle;
+    public ArrayList<Edge> getNegativeCycle() {
+        return negativeCycle;
     }
 
     public Node getPrev(Node n) {
         return prev[n.getLabel()];
+    }
+
+    public double getTotalNegativeCycleCosts() {
+        return totalNegativeCycleCosts;
     }
 
     public boolean isNegativeCycle() {
