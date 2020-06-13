@@ -117,7 +117,7 @@ public class Algorithm {
         ArrayList<Edge> edges = g.getAllEdges();
         for(int i = 1; i < g.countNodes(); i++) {
             for(Edge e: edges) {
-                if(e.getCapacity() > 0.0 && tree.getDist(e.getA()) + e.getCosts() < tree.getDist(e.getB())) {
+                if(e.getCapacity() > 0.0) {
                     Node v = e.getA();
                     Node w = e.getB();
                     Double ce = e.getCosts();

@@ -11,7 +11,7 @@ public class PreviousStructure {
 
     private double[] dist;
     private double minNegativCylcleCapacity = Double.POSITIVE_INFINITY;
-    private ArrayList<Edge> negativeCycle = null;
+    private ArrayList<Edge> negativeCycle = new ArrayList<>();
     private Node[] prev;
     private int status = IS_TREE;
     private double totalNegativeCycleCosts = 0.0;
@@ -27,7 +27,6 @@ public class PreviousStructure {
     }
 
     public void constructNegativCycle(Node currentNode, Graph g) {
-
         for(int i = 0; i < g.countNodes(); i++) {
             currentNode = prev[currentNode.getLabel()];
         }
