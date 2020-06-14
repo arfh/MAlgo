@@ -150,6 +150,19 @@ class AlgorithmTest {
         }
     }
 
-
+    @ParameterizedTest
+    @CsvFileSource(resources = "/costmin.csv", numLinesToSkip = 1)
+    void testSSP(String filename, Double mincosts) {
+        try {
+            FlowGraph g = new FlowGraph(new File(filename));
+            double cost = Algorithm.ssp(g);
+            assertEquals(mincosts, cost);
+        } catch (NoCostMinimalFlowException ex) {
+            ex.printStackTrace();
+            assertEquals(-1, mincosts);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
 

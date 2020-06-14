@@ -5,9 +5,10 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node>{
 
+    private double balance;
     private ArrayList<Edge> edges = new ArrayList<>();
     private Integer label;
-    private double balance;
+    private double isBalance = 0.0;
 
     public Node(Integer label) {
         this.label = label;
@@ -23,15 +24,13 @@ public class Node implements Comparable<Node>{
         }
     }
 
-    public void removeEdge(Edge e){
-        if(e != null){
-            edges.remove(e);
-        }
-    }
-
     @Override
     public int compareTo(Node o) {
         return this.label.compareTo(o.label);
+    }
+
+    public void decreaseIsBalance(Double x) {
+        isBalance -= x;
     }
 
     @Override
@@ -40,6 +39,14 @@ public class Node implements Comparable<Node>{
             return label.equals(((Node) obj).label);
         }
         return false;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public Edge getEdge(Node target){
@@ -59,15 +66,25 @@ public class Node implements Comparable<Node>{
         return label;
     }
 
+    public double getIsBalance() {
+        return isBalance;
+    }
+
+    public void setIsBalance(double isBalance) {
+        this.isBalance = isBalance;
+    }
+
+    public void increaseIsBalance(Double x) {
+        isBalance += x;
+    }
+
+    public void removeEdge(Edge e){
+        if(e != null){
+            edges.remove(e);
+        }
+    }
+
     public String toString() {
         return label + " " + edges.toString();
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
     }
 }

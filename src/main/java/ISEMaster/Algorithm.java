@@ -379,6 +379,60 @@ public class Algorithm {
         return new Graph(edges);
     }
 
+    public static double ssp(FlowGraph g) throws NoCostMinimalFlowException {
+        g.checkIfResidualAndConstructIfNot();
+        for(Edge e: g.getAllEdges()) {
+            if(e.getCosts() >= 0) {
+                e.setFlow(0.0);
+            } else {
+                e.setFlow(e.getCapacity());
+            }
+            Node a = e.getA();
+            a.increaseIsBalance(e.getFlow());
+            Node b = e.getB();
+            b.decreaseIsBalance(e.getFlow());
+        }
+        System.out.println("");
+        while(!isCostMinimal(g)) {
+            Node s = getSNode(g);
+            Node t = getTNode(g);
+            if(s == null || t == null) {
+                throw new NoCostMinimalFlowException();
+            }
+
+            PreviousStructure prev = bellmanFord(g, s);
+            ArrayList<Node> p = prev.getPath(s, t);
+
+            double gamma = Math.min(s.getBalance()-s.getIsBalance(), t.getIsBalance() - t.getBalance());
+            for(int i = 0; i < p.size()-1; i++) {
+                Node a = p.get(i);
+                Node b = p.get(i+1);
+
+                try {
+                    Edge e = g.getEdgeFromNodes(a, b);
+                    gamma = Math.min(gamma, e.getCapacity());
+                } catch (EdgeNotFoundException edgeNotFoundException) {}
+
+            }
+            for(int i = 0; i < p.size()-1; i++) {
+                Node a = p.get(i);
+                Node b = p.get(i+1);
+
+                try {
+                    Edge e = g.getEdgeFromNodes(a, b);
+                    if(e.isResidualEdge()) {
+                        e.decreaseFlow(gamma);
+                    } else {
+                        e.increaseFlow(gamma);
+                    }
+                } catch (EdgeNotFoundException edgeNotFoundException) {}
+            }
+            s.increaseIsBalance(gamma);
+            t.decreaseIsBalance(gamma);
+        }
+        return 0.0;
+    }
+
     private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
         try{
             Edge tmp = g.getEdgeFromNodes(a, b);
@@ -414,6 +468,37 @@ public class Algorithm {
         return newNodes[a.getLabel()];
     }
 
+    private static Node getSNode(FlowGraph g) {
+        Node s = null;
+        for(Node n: g.getNodes()) {
+            if((n.getBalance()-n.getIsBalance()) > 0) {
+                s = n;
+                break;
+            }
+        }
+        return s;
+    }
+
+    private static Node getTNode(FlowGraph g) {
+        Node t = null;
+        for(Node n: g.getNodes()) {
+            if((n.getBalance()-n.getIsBalance()) < 0) {
+                t = n;
+                break;
+            }
+        }
+        return t;
+    }
+
+    private static boolean isCostMinimal(FlowGraph g) {
+        for(Node n: g.getNodes()) {
+            if(n.getBalance() != n.getIsBalance()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static Route recursiveBruteForce(Graph g, Route r, ArrayList<Node> unvisited, Route cheapest, final boolean bb){
         if(unvisited.isEmpty()){
             addEdgeToRoute(r, r.getLastNode(), r.getFirstNode(), g);
@@ -435,4 +520,5 @@ public class Algorithm {
             return cheapest;
         }
     }
+
 }

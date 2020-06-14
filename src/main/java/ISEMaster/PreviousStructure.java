@@ -115,4 +115,16 @@ public class PreviousStructure {
         }
         return str.toString();
     }
+
+    public ArrayList<Node> getPath(Node s, Node t) {
+        ArrayList<Node> p = new ArrayList<>();
+
+        Node n = t;
+        while(n.equals(s) == false) {
+            p.add(0, n);
+            n = prev[n.getLabel()];
+        }
+        p.add(0, s);
+        return p;
+    }
 }
