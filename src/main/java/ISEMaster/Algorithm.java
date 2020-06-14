@@ -380,7 +380,7 @@ public class Algorithm {
     }
 
     public static double ssp(FlowGraph g) throws NoCostMinimalFlowException {
-        g.checkIfResidualAndConstructIfNot();
+
         for(Edge e: g.getAllEdges()) {
             if(e.getCosts() >= 0) {
                 e.setFlow(0.0);
@@ -392,6 +392,7 @@ public class Algorithm {
             Node b = e.getB();
             b.decreaseIsBalance(e.getFlow());
         }
+        g.checkIfResidualAndConstructIfNot();
         System.out.println("");
         while(!isCostMinimal(g)) {
             Node s = getSNode(g);

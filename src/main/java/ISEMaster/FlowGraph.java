@@ -73,6 +73,17 @@ public class FlowGraph extends Graph {
     }
 
     public void checkIfResidualAndConstructIfNot(){
+        for(Edge e: getAllEdges()) {
+            try {
+                getEdgeFromNodes(e.getB(), e.getA());
+            } catch (EdgeNotFoundException ex) {
+                Edge rev = new Edge(e.getB(), e.getA(), -e.getCosts());
+                rev.setCapacity(0.0);
+                rev.setResidualEdge(true);
+                e.getB().addEdge(rev);
+            }
+        }
+        /*
         for(Node n : this.nodes){
             for(Edge e : n.getEdges()){
                 Node a = e.getA();
@@ -90,6 +101,7 @@ public class FlowGraph extends Graph {
                 }
             }
         }
+        */
     }
 
     public double getMaxflow() {

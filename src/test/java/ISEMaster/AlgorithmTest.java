@@ -162,6 +162,7 @@ class AlgorithmTest {
             assertEquals(-1, mincosts);
         } catch (Exception ex) {
             ex.printStackTrace();
+            assertTrue(false);
         }
     }
 }
