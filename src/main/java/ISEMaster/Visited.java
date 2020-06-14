@@ -5,6 +5,10 @@ public class Visited {
     private int counter = 0;
     private boolean[] v = null;
 
+    public boolean[] getVarray(){
+        return v;
+    }
+
     public Visited(int size) {
         v = new boolean[size];
     }

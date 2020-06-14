@@ -1,5 +1,6 @@
 package ISEMaster;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Algorithm {
@@ -41,7 +42,7 @@ public class Algorithm {
     public static FlowGraph EdmondsKarp(Graph g, Node s, Node t) {
         FlowGraph fg = new FlowGraph(g);
         fg.checkIfResidualAndConstructIfNot();
-        ArrayList<Node> p = doBreadthFirstSearch(fg, s, t);
+        ArrayList<Node> p = doBreadthFirstSearch(fg, s, t, null);
         while (!p.isEmpty()) {
             // Get Min Capacity from s-t
             double max_Path_Flow = Double.MAX_VALUE;
@@ -77,7 +78,7 @@ public class Algorithm {
                 }
             }
             fg.increaseFlow(max_Path_Flow);
-            p = doBreadthFirstSearch(fg, s, t);
+            p = doBreadthFirstSearch(fg, s, t, null);
         }
         return fg;
     }
@@ -250,10 +251,12 @@ public class Algorithm {
         return tree;
     }
 
-    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t) {
+    public static ArrayList<Node> doBreadthFirstSearch(Graph g, Node s, Node t, Visited v) {
         ArrayList<Node> res = new ArrayList<>();
         Queue<Node> queue = new LinkedList<>();
-        Visited v = new Visited(g.countNodes());
+        if(v == null){
+            v = new Visited(g.countNodes());
+        }
         queue.add(s);
         v.setVisited(s);
         Predesessor pre = new Predesessor(g, s);
@@ -380,23 +383,30 @@ public class Algorithm {
     }
 
     public static double ssp(FlowGraph g) throws NoCostMinimalFlowException {
-
-        for(Edge e: g.getAllEdges()) {
-            if(e.getCosts() >= 0) {
-                e.setFlow(0.0);
-            } else {
-                e.setFlow(e.getCapacity());
-            }
-            Node a = e.getA();
-            a.increaseIsBalance(e.getFlow());
-            Node b = e.getB();
-            b.decreaseIsBalance(e.getFlow());
-        }
         g.checkIfResidualAndConstructIfNot();
+        for(Edge e: g.getAllEdges()) {
+            if(!e.isResidualEdge()){
+                if(e.getCosts() < 0) { // Der Fluss ist stdandardmäßig eh 0
+                    e.setFlow(e.getCapacity());
+                    e.setCapacity(0.0);
+
+                    try {
+                        Edge rev = g.getEdgeFromNodes(e.getB(), e.getA());
+                        rev.setCapacity(e.getFlow());
+                    } catch (EdgeNotFoundException ex) {
+                    }
+                }
+                Node a = e.getA();
+                a.increaseIsBalance(e.getFlow());
+                Node b = e.getB();
+                b.decreaseIsBalance(e.getFlow());
+            }
+        }
+
         System.out.println("");
         while(!isCostMinimal(g)) {
             Node s = getSNode(g);
-            Node t = getTNode(g);
+            Node t = getTNode(g, s);
             if(s == null || t == null) {
                 throw new NoCostMinimalFlowException();
             }
@@ -430,6 +440,7 @@ public class Algorithm {
             }
             s.increaseIsBalance(gamma);
             t.decreaseIsBalance(gamma);
+
         }
         return 0.0;
     }
@@ -473,22 +484,27 @@ public class Algorithm {
         Node s = null;
         for(Node n: g.getNodes()) {
             if((n.getBalance()-n.getIsBalance()) > 0) {
-                s = n;
+                s=n;
                 break;
             }
         }
         return s;
     }
 
-    private static Node getTNode(FlowGraph g) {
-        Node t = null;
-        for(Node n: g.getNodes()) {
-            if((n.getBalance()-n.getIsBalance()) < 0) {
-                t = n;
-                break;
+    private static Node getTNode(FlowGraph g, Node s) {
+        if(s == null)
+            return null;
+
+        Visited v = new Visited(g.countNodes());
+
+        for(int i=0; i<v.getVarray().length; i++){
+            Node n = g.getNodes().get(i);
+            if(v.isVisited(n) && (n.getBalance() - n.getIsBalance()) < 0){
+                return n;
             }
         }
-        return t;
+
+        return null;
     }
 
     private static boolean isCostMinimal(FlowGraph g) {
