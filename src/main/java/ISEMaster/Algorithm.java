@@ -385,29 +385,30 @@ public class Algorithm {
     public static double ssp(FlowGraph g) throws NoCostMinimalFlowException {
         g.checkIfResidualAndConstructIfNot();
         for(Edge e: g.getAllEdges()) {
-            if(!e.isResidualEdge()){
-                if(e.getCosts() < 0) { // Der Fluss ist stdandardmäßig eh 0
-                    e.setFlow(e.getCapacity());
-                    e.setCapacity(0.0);
-
-                    try {
-                        Edge rev = g.getEdgeFromNodes(e.getB(), e.getA());
-                        rev.setCapacity(e.getFlow());
-                    } catch (EdgeNotFoundException ex) {
-                    }
-                }
-                Node a = e.getA();
-                a.increaseIsBalance(e.getFlow());
-                Node b = e.getB();
-                b.decreaseIsBalance(e.getFlow());
+            if(!e.isResidualEdge() && e.getCosts() < 0) { // Der Fluss ist stdandardmäßig eh 0
+                e.setFlow(e.getCapacity());
+                //e.setCapacity(0.0);
             }
+            Node a = e.getA();
+            a.increaseIsBalance(e.getFlow());
+            Node b = e.getB();
+            b.decreaseIsBalance(e.getFlow());
         }
-
         System.out.println("");
-        while(!isCostMinimal(g)) {
+        int iteration = 0;
+        while(true) {
             Node s = getSNode(g);
             Node t = getTNode(g, s);
             if(s == null || t == null) {
+                if(isCostMinimal(g)) {
+                    double costs = 0.0;
+                    for(Edge e: g.getAllEdges()) {
+                        if(!e.isResidualEdge()) {
+                            costs += (e.getFlow()*e.getCosts());
+                        }
+                    }
+                    return costs;
+                }
                 throw new NoCostMinimalFlowException();
             }
 
@@ -425,24 +426,32 @@ public class Algorithm {
                 } catch (EdgeNotFoundException edgeNotFoundException) {}
 
             }
+
             for(int i = 0; i < p.size()-1; i++) {
                 Node a = p.get(i);
                 Node b = p.get(i+1);
 
                 try {
                     Edge e = g.getEdgeFromNodes(a, b);
+                    Edge rev = g.getEdgeFromNodes(b, a);
                     if(e.isResidualEdge()) {
                         e.decreaseFlow(gamma);
+                        //e.increaseCapacity(gamma);
+                        rev.increaseFlow(gamma);
                     } else {
                         e.increaseFlow(gamma);
+                        //e.decreaseCapacity(gamma);
+                        rev.decreaseFlow(gamma);
                     }
-                } catch (EdgeNotFoundException edgeNotFoundException) {}
+                } catch (EdgeNotFoundException ex) {
+                    ex.printStackTrace();
+                    return 0.0;
+                }
             }
             s.increaseIsBalance(gamma);
             t.decreaseIsBalance(gamma);
-
+            iteration++;
         }
-        return 0.0;
     }
 
     private static Route addEdgeToRoute(Route r, Node a, Node b, Graph g) {
@@ -496,7 +505,7 @@ public class Algorithm {
             return null;
 
         Visited v = new Visited(g.countNodes());
-
+        doBreadthFirstSearch(g, s, null, v);
         for(int i=0; i<v.getVarray().length; i++){
             Node n = g.getNodes().get(i);
             if(v.isVisited(n) && (n.getBalance() - n.getIsBalance()) < 0){

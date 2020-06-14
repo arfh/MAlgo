@@ -41,9 +41,6 @@ public class Edge implements Comparable<Edge>{
 
     public void decreaseFlow(Double x) {
         flow = flow - x;
-        if(flow < 0.0) {
-            flow = 0.0;
-        }
     }
 
     public boolean equals(Object o) {

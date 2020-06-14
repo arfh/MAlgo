@@ -66,7 +66,7 @@ class AlgorithmTest {
     @CsvFileSource(resources = "/bfs.csv", numLinesToSkip = 1)
     void testBreadthFirstSearch(String filename, int s, int t, int length) {
         Graph g = GraphSupplier.getGraph(filename, true);
-        assertEquals(length, Algorithm.doBreadthFirstSearch(g, g.getNodes().get(s), g.getNodes().get(t)).size());
+        assertEquals(length, Algorithm.doBreadthFirstSearch(g, g.getNodes().get(s), g.getNodes().get(t), null).size());
     }
 
     @ParameterizedTest
@@ -158,7 +158,6 @@ class AlgorithmTest {
             double cost = Algorithm.ssp(g);
             assertEquals(mincosts, cost);
         } catch (NoCostMinimalFlowException ex) {
-            ex.printStackTrace();
             assertEquals(-1, mincosts);
         } catch (Exception ex) {
             ex.printStackTrace();
