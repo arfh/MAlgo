@@ -125,7 +125,7 @@ public class Algorithm {
                     double cw = tree.getDist(w);
                     double tmpc = tree.getDist(v) + ce;
 
-                    if (tmpc < cw && !tree.getPrev(v).equals(w)) {
+                    if (tmpc < cw && !w.equals(tree.getPrev(v))) {
                         tree.setDist(w, tmpc);
                         tree.setPrev(w, v);
                     }
@@ -172,6 +172,7 @@ public class Algorithm {
             Edge e = new Edge(superS, source, 0.0, source.getBalance());
             superS.addEdge(e);
             superS.setBalance(superS.getBalance() + source.getBalance());
+            //source.setBalance(0.0);
         }
 
         Node superT = g.addNode();
@@ -184,6 +185,7 @@ public class Algorithm {
             target.addEdge(e);
 
             superT.setBalance(superT.getBalance() + target.getBalance());
+            //target.setBalance(0.0);
         }
 
         // Schritt 1
@@ -209,10 +211,13 @@ public class Algorithm {
 
                     for(Edge e: negativeCycle) {
                         e.decreaseCapacity(minCapacity);
+                        e.increaseFlow(minCapacity);
                         try {
                             Edge rev = g.getEdgeFromNodes(e.getB(), e.getA());
                             rev.increaseCapacity(minCapacity);
-                        } catch (EdgeNotFoundException edgeNotFoundException) {}
+                            rev.decreaseFlow(minCapacity);
+                        } catch (EdgeNotFoundException edgeNotFoundException) {
+                        }
                     }
                     g.increaseTotalMinMaxFlowCosts(prev.getTotalNegativeCycleCosts() * prev.getMinNegativCylcleCapacity());
                 }

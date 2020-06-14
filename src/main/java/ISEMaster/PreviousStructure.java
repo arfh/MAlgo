@@ -57,10 +57,6 @@ public class PreviousStructure {
         return dist[n.getLabel()];
     }
 
-    public double getMinNegativCylcleCapacity(){
-        return minNegativCylcleCapacity;
-    }
-
     public Node getMinDist(ArrayList<Node> unvisisted) throws ListIsEmptyException{
         if(unvisisted.isEmpty()) {
             throw new ListIsEmptyException();
@@ -78,8 +74,24 @@ public class PreviousStructure {
         return min;
     }
 
+    public double getMinNegativCylcleCapacity(){
+        return minNegativCylcleCapacity;
+    }
+
     public ArrayList<Edge> getNegativeCycle() {
         return negativeCycle;
+    }
+
+    public ArrayList<Node> getPath(Node s, Node t) {
+        ArrayList<Node> p = new ArrayList<>();
+
+        Node n = t;
+        while(n.equals(s) == false) {
+            p.add(0, n);
+            n = prev[n.getLabel()];
+        }
+        p.add(0, s);
+        return p;
     }
 
     public Node getPrev(Node n) {
@@ -114,17 +126,5 @@ public class PreviousStructure {
             }
         }
         return str.toString();
-    }
-
-    public ArrayList<Node> getPath(Node s, Node t) {
-        ArrayList<Node> p = new ArrayList<>();
-
-        Node n = t;
-        while(n.equals(s) == false) {
-            p.add(0, n);
-            n = prev[n.getLabel()];
-        }
-        p.add(0, s);
-        return p;
     }
 }
