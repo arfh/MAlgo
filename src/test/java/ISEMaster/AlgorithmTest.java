@@ -157,6 +157,7 @@ class AlgorithmTest {
             FlowGraph g = new FlowGraph(new File(filename));
             double cost = Algorithm.ssp(g);
             assertEquals(mincosts, cost);
+            System.out.println(cost);
         } catch (NoCostMinimalFlowException ex) {
             assertEquals(-1, mincosts);
         } catch (Exception ex) {

@@ -387,7 +387,14 @@ public class Algorithm {
         for(Edge e: g.getAllEdges()) {
             if(!e.isResidualEdge() && e.getCosts() < 0) { // Der Fluss ist stdandardmäßig eh 0
                 e.setFlow(e.getCapacity());
-                //e.setCapacity(0.0);
+                e.setCapacity(0.0);
+
+                try{
+                    Edge rev = g.getEdgeFromNodes(e.getB(),e.getA());
+                    rev.setCapacity(e.getFlow());
+                }catch(EdgeNotFoundException ex){
+
+                }
             }
             Node a = e.getA();
             a.increaseIsBalance(e.getFlow());
@@ -434,15 +441,11 @@ public class Algorithm {
                 try {
                     Edge e = g.getEdgeFromNodes(a, b);
                     Edge rev = g.getEdgeFromNodes(b, a);
-                    if(e.isResidualEdge()) {
-                        e.decreaseFlow(gamma);
-                        //e.increaseCapacity(gamma);
-                        rev.increaseFlow(gamma);
-                    } else {
-                        e.increaseFlow(gamma);
-                        //e.decreaseCapacity(gamma);
-                        rev.decreaseFlow(gamma);
-                    }
+
+                    e.increaseFlow(gamma);
+                    e.decreaseCapacity(gamma);
+                    rev.decreaseFlow(gamma);
+                    rev.increaseCapacity(gamma);
                 } catch (EdgeNotFoundException ex) {
                     ex.printStackTrace();
                     return 0.0;
