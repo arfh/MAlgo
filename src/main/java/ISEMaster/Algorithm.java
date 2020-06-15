@@ -168,7 +168,7 @@ public class Algorithm {
         return cheapest;
     }
 
-    public static double cycleCanceling (FlowGraph g) throws NoBFlowPossibleException{
+    public static double cycleCanceling (FlowGraph g) throws NoBFlowPossibleException {
         List<Node> sources = g.getSources();
         List<Node> targets = g.getTargets();
 
@@ -199,15 +199,16 @@ public class Algorithm {
 
         if(g.getMaxflow() == superS.getBalance() && -g.getMaxflow() == superT.getBalance()){
             boolean ready = false;
+            Visited v = new Visited(g.countNodes());
             while(!ready) {
-                for (Node n : g.getNodes()) {
-
+                for(Node n: g.getNodes()) {
+                    v.setVisited(n);
                     // Schritt 3
                     PreviousStructure prev = bellmanFord(g, n);
 
                     ArrayList<Edge> negativeCycle = prev.getNegativeCycle();
 
-                    if (!prev.isNegativeCycle()) {
+                    if (!prev.isNegativeCycle() && v.allVisited()) {
                         ready = true;
                         break;
                     }
