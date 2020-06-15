@@ -5,7 +5,7 @@ public class Edge implements Comparable<Edge>{
     public static final Double DEF_COSTS = 1.0;
     private Node a;
     private Node b;
-    private Double capacity = 0.0;
+    private Double capacity = 1.0;
     private Double costs;
     private Double flow = 0.0;
     private boolean isResidualEdge = false;
@@ -18,7 +18,6 @@ public class Edge implements Comparable<Edge>{
         this.a = a;
         this.b = b;
         this.costs = costs;
-        this.capacity = costs;
     }
 
     public Edge(Node a, Node b, Double costs, double capacity) {
@@ -41,6 +40,9 @@ public class Edge implements Comparable<Edge>{
 
     public void decreaseFlow(Double x) {
         flow = flow - x;
+        if(flow < 0.0) {
+            //flow = 0.0;
+        }
     }
 
     public boolean equals(Object o) {

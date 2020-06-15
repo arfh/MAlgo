@@ -1,8 +1,8 @@
 filename,mincosts
-Kostenminimal1.txt,3
-Kostenminimal2.txt,0
-Kostenminimal3.txt,-1
-Kostenminimal4.txt,-1
-Kostenminimal_gross1.txt,1537
-Kostenminimal_gross2.txt,1838
-Kostenminimal_gross3.txt,-1
+Kostenminimal1.txt,3,false
+Kostenminimal2.txt,0,false
+Kostenminimal3.txt,-1,true
+Kostenminimal4.txt,-1,true
+Kostenminimal_gross1.txt,1537,false
+Kostenminimal_gross2.txt,1838,false
+Kostenminimal_gross3.txt,-1,true

@@ -125,7 +125,11 @@ public class Algorithm {
                     double cw = tree.getDist(w);
                     double tmpc = tree.getDist(v) + ce;
 
-                    if (tmpc < cw && !w.equals(tree.getPrev(v))) {
+                    if(v.getLabel() == 0 || w.getLabel() == 0) {
+                        int x = 0;
+                    }
+
+                    if (tmpc < cw) {
                         tree.setDist(w, tmpc);
                         tree.setPrev(w, v);
                     }
@@ -134,13 +138,15 @@ public class Algorithm {
         }
 
         for(Edge e: edges) {
-            double cv = tree.getDist(e.getA());
-            double ce = e.getCosts();
-            double cw = tree.getDist(e.getB());
-            if((cv +ce) < cw) {
-                tree.setToNegaticeCyle();
-                tree.constructNegativCycle(e.getA(), g);
-                return tree;
+            if(e.getCapacity() > 0.0) {
+                double cv = tree.getDist(e.getA());
+                double ce = e.getCosts();
+                double cw = tree.getDist(e.getB());
+                if ((cv + ce) < cw) {
+                    tree.setToNegaticeCyle();
+                    tree.constructNegativCycle(e.getA(), g);
+                    return tree;
+                }
             }
         }
         return tree;
@@ -162,7 +168,7 @@ public class Algorithm {
         return cheapest;
     }
 
-    public static double cycleCanceling (FlowGraph g){
+    public static double cycleCanceling (FlowGraph g) throws NoBFlowPossibleException{
         List<Node> sources = g.getSources();
         List<Node> targets = g.getTargets();
 
@@ -222,10 +228,10 @@ public class Algorithm {
                     g.increaseTotalMinMaxFlowCosts(prev.getTotalNegativeCycleCosts() * prev.getMinNegativCylcleCapacity());
                 }
             }
-            return g.getTotalMinMaxFlowCosts();
+            return calculateMinMaxCosts(g);
         }
         else{
-            return -1;
+            throw new NoBFlowPossibleException();
         }
 
 
@@ -413,13 +419,7 @@ public class Algorithm {
             Node t = getTNode(g, s);
             if(s == null || t == null) {
                 if(isCostMinimal(g)) {
-                    double costs = 0.0;
-                    for(Edge e: g.getAllEdges()) {
-                        if(!e.isResidualEdge()) {
-                            costs += (e.getFlow()*e.getCosts());
-                        }
-                    }
-                    return costs;
+                    return calculateMinMaxCosts(g);
                 }
                 throw new NoCostMinimalFlowException();
             }
@@ -553,6 +553,16 @@ public class Algorithm {
             }
             return cheapest;
         }
+    }
+
+    private static double calculateMinMaxCosts(Graph g) {
+        double costs = 0.0;
+        for(Edge e: g.getAllEdges()) {
+            if(!e.isResidualEdge()) {
+                costs += (e.getFlow()*e.getCosts());
+            }
+        }
+        return costs;
     }
 
 }

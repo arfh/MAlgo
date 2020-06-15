@@ -28,7 +28,7 @@ public class PreviousStructure {
 
     public void constructNegativCycle(Node currentNode, Graph g) {
         for(int i = 0; i < g.countNodes(); i++) {
-            currentNode = prev[currentNode.getLabel()];
+            //currentNode = prev[currentNode.getLabel()];
         }
 
         negativeCycle = new ArrayList<>();

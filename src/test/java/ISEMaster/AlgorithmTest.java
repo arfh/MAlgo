@@ -58,6 +58,7 @@ class AlgorithmTest {
         PreviousStructure tree = Algorithm.bellmanFord(g, g.getNodes().get(startNode));
         long end = System.nanoTime();
         System.out.println("Time: " + (end - start) / 1000.0 / 1000.0);
+        System.out.println(tree.getDist(g.getNodes().get(tartgetNode)));
         assertTrue(cost >= tree.getDist(g.getNodes().get(tartgetNode)));
         assertEquals(isNegativCycle, tree.isNegativeCycle());
     }
@@ -137,13 +138,14 @@ class AlgorithmTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "/costmin.csv", numLinesToSkip = 1)
-    void testCCA(String filename, Double mincosts) {
+    void testCCA(String filename, Double mincosts, boolean notPossible) {
         try {
             FlowGraph g = new FlowGraph(new File(filename));
             double cost = Algorithm.cycleCanceling(g);
+            System.out.println(cost);
             assertEquals(mincosts, cost);
-
-
+        } catch(NoBFlowPossibleException nbex) {
+            assertTrue(notPossible);
         } catch (Exception ex) {
             ex.printStackTrace();
             assertTrue(false);
