@@ -125,10 +125,6 @@ public class Algorithm {
                     double cw = tree.getDist(w);
                     double tmpc = tree.getDist(v) + ce;
 
-                    if(v.getLabel() == 0 || w.getLabel() == 0) {
-                        int x = 0;
-                    }
-
                     if (tmpc < cw) {
                         tree.setDist(w, tmpc);
                         tree.setPrev(w, v);
