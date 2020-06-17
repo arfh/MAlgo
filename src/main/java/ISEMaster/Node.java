@@ -7,8 +7,8 @@ public class Node implements Comparable<Node>{
 
     private double balance;
     private ArrayList<Edge> edges = new ArrayList<>();
-    private Integer label;
     private double isBalance = 0.0;
+    private Integer label;
 
     public Node(Integer label) {
         this.label = label;
@@ -62,16 +62,16 @@ public class Node implements Comparable<Node>{
         return edges;
     }
 
-    public Integer getLabel() {
-        return label;
-    }
-
     public double getIsBalance() {
         return isBalance;
     }
 
     public void setIsBalance(double isBalance) {
         this.isBalance = isBalance;
+    }
+
+    public Integer getLabel() {
+        return label;
     }
 
     public void increaseIsBalance(Double x) {

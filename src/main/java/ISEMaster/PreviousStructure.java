@@ -42,18 +42,9 @@ public class PreviousStructure {
         }
     }
 
-    private void addEdgeToCycle(Graph g, Node a, Node b){
-        try {
-            Edge e = g.getEdgeFromNodes(a, b);
-            negativeCycle.add(e);
-            minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
-        } catch(EdgeNotFoundException ex) {}
-    }
-
     public double getDist(Node n) {
         return dist[n.getLabel()];
     }
-
 
     public double getMinNegativCylcleCapacity(){
         return minNegativCylcleCapacity;
@@ -107,5 +98,13 @@ public class PreviousStructure {
             }
         }
         return str.toString();
+    }
+
+    private void addEdgeToCycle(Graph g, Node a, Node b){
+        try {
+            Edge e = g.getEdgeFromNodes(a, b);
+            negativeCycle.add(e);
+            minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
+        } catch(EdgeNotFoundException ex) {}
     }
 }

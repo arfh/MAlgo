@@ -5,16 +5,16 @@ public class Visited {
     private int counter = 0;
     private boolean[] v = null;
 
-    public boolean[] getVarray(){
-        return v;
-    }
-
     public Visited(int size) {
         v = new boolean[size];
     }
 
     public boolean allVisited() {
         return v.length == counter;
+    }
+
+    public boolean[] getVarray(){
+        return v;
     }
 
     public boolean isNotVisited(Node n) {

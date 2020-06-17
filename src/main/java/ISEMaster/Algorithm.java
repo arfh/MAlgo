@@ -478,6 +478,16 @@ public class Algorithm {
         edges.add(newEdge);
     }
 
+    private static double calculateMinMaxCosts(Graph g) {
+        double costs = 0.0;
+        for(Edge e: g.getAllEdges()) {
+            if(!e.isResidualEdge()) {
+                costs += (e.getFlow()*e.getCosts());
+            }
+        }
+        return costs;
+    }
+
     private static boolean checkCheapestRoute(Route r, Route currentCheapest) {
         if(currentCheapest.countEdges() == 0) {
             return true;
@@ -549,16 +559,6 @@ public class Algorithm {
             }
             return cheapest;
         }
-    }
-
-    private static double calculateMinMaxCosts(Graph g) {
-        double costs = 0.0;
-        for(Edge e: g.getAllEdges()) {
-            if(!e.isResidualEdge()) {
-                costs += (e.getFlow()*e.getCosts());
-            }
-        }
-        return costs;
     }
 
 }

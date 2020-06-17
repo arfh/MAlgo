@@ -18,7 +18,6 @@ public class Edge implements Comparable<Edge>{
         this.a = a;
         this.b = b;
         this.costs = costs;
-        capacity = costs;
     }
 
     public Edge(Node a, Node b, Double costs, double capacity) {

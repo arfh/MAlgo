@@ -3,8 +3,8 @@ package ISEMaster;
 import java.util.ArrayList;
 
 public class Route {
-    private ArrayList<Edge> edges = new ArrayList<>();
     private double costs = 0.0;
+    private ArrayList<Edge> edges = new ArrayList<>();
 
     public Route(Route r){
         for(Edge e : r.edges){

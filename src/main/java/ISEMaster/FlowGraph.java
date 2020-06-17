@@ -1,5 +1,7 @@
 package ISEMaster;
 
+import com.sun.tools.javac.comp.Flow;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,12 +65,21 @@ public class FlowGraph extends Graph {
         }
     }
 
-    FlowGraph(Graph g){
+    public FlowGraph(Graph g) {
+        this(g, false);
+    }
+
+    public FlowGraph(Graph g, boolean setCapacityToEdgeCost){
         super(g);
         if(g instanceof FlowGraph) {
             sources = ((FlowGraph) g).sources;
             targets = ((FlowGraph) g).targets;
             maxflow = ((FlowGraph) g).maxflow;
+        }
+        if(setCapacityToEdgeCost) {
+            for (Edge e: getAllEdges()) {
+                e.setCapacity(e.getCosts());
+            }
         }
     }
 
@@ -83,25 +94,6 @@ public class FlowGraph extends Graph {
                 e.getB().addEdge(rev);
             }
         }
-        /*
-        for(Node n : this.nodes){
-            for(Edge e : n.getEdges()){
-                Node a = e.getA();
-                Node b = e.getB();
-                if(!e.isResidualEdge()){
-                    try{
-                        Edge back = super.getEdgeFromNodes(b,a);
-                        back.setCapacity(e.getFlow());
-                    }catch(EdgeNotFoundException ex){
-                        Edge tmp = new Edge(b, a, -e.getCosts(), e.getFlow());
-                        //tmp.setCapacity(e.getFlow());
-                        b.addEdge(tmp);
-                        tmp.setResidualEdge(true);
-                    }
-                }
-            }
-        }
-        */
     }
 
     public double getMaxflow() {
@@ -120,16 +112,16 @@ public class FlowGraph extends Graph {
         return totalMinMaxFlowCosts;
     }
 
-    public void increaseTotalMinMaxFlowCosts(Double x) {
-        totalMinMaxFlowCosts += x;
+    public void increaseFlow(Double flow) {
+        maxflow += flow;
     }
 
     public void increaseTotalCosts(Double costs) {
         totalCosts += costs;
     }
 
-    public void increaseFlow(Double flow) {
-        maxflow += flow;
+    public void increaseTotalMinMaxFlowCosts(Double x) {
+        totalMinMaxFlowCosts += x;
     }
 
 }

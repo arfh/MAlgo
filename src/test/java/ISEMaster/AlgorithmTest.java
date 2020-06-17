@@ -85,6 +85,22 @@ class AlgorithmTest {
     }
 
     @ParameterizedTest
+    @CsvFileSource(resources = "/costmin.csv", numLinesToSkip = 1)
+    void testCCA(String filename, Double mincosts, boolean notPossible) {
+        try {
+            FlowGraph g = new FlowGraph(new File(filename));
+            double cost = Algorithm.cycleCanceling(g);
+            System.out.println(cost);
+            assertEquals(mincosts, cost);
+        } catch(NoBFlowPossibleException nbex) {
+            assertTrue(notPossible);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @ParameterizedTest
     @CsvFileSource(resources = "/NNA_DBA.csv", numLinesToSkip = 1)
     void testDBA(String filename, double costs){
         Graph g = GraphSupplier.getGraph(filename);
@@ -117,6 +133,7 @@ class AlgorithmTest {
     @CsvFileSource(resources = "/edmondsKarp.csv", numLinesToSkip = 1)
     void testEdmondsKarp(String filename, int s, int t, double flow) {
         Graph g = GraphSupplier.getGraph(filename, true);
+        g = new FlowGraph(g, true);
         FlowGraph fg = Algorithm.EdmondsKarp(g, g.getNodes().get(s), g.getNodes().get(t));
         System.out.println(fg.getMaxflow());
         assertEquals(flow, fg.getMaxflow());
@@ -134,22 +151,6 @@ class AlgorithmTest {
 
         System.out.println(r);
         System.out.println(r.totalCosts());
-    }
-
-    @ParameterizedTest
-    @CsvFileSource(resources = "/costmin.csv", numLinesToSkip = 1)
-    void testCCA(String filename, Double mincosts, boolean notPossible) {
-        try {
-            FlowGraph g = new FlowGraph(new File(filename));
-            double cost = Algorithm.cycleCanceling(g);
-            System.out.println(cost);
-            assertEquals(mincosts, cost);
-        } catch(NoBFlowPossibleException nbex) {
-            assertTrue(notPossible);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            assertTrue(false);
-        }
     }
 
     @ParameterizedTest
