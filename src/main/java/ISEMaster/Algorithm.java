@@ -204,7 +204,7 @@ public class Algorithm {
 
                     ArrayList<Edge> negativeCycle = prev.getNegativeCycle();
 
-                    if (!prev.isNegativeCycle() && v.allVisited()) {
+                    if (v.allVisited()) {
                         ready = true;
                         break;
                     }
@@ -222,7 +222,6 @@ public class Algorithm {
                         } catch (EdgeNotFoundException edgeNotFoundException) {
                         }
                     }
-                    g.increaseTotalMinMaxFlowCosts(prev.getTotalNegativeCycleCosts() * prev.getMinNegativCylcleCapacity());
                 }
             }
             return calculateMinMaxCosts(g);

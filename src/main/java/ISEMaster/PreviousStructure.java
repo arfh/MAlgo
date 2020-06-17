@@ -35,44 +35,25 @@ public class PreviousStructure {
         if(isNegativeCycle()) {
             Node start = currentNode;
             while(getPrev(currentNode).equals(start) == false) {
-                try {
-                    Edge e = g.getEdgeFromNodes(getPrev(currentNode), currentNode);
-                    negativeCycle.add(e);
-                    totalNegativeCycleCosts += e.getCosts();
-                    minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
-                    currentNode = getPrev(currentNode);
-                } catch(EdgeNotFoundException ex) {}
+                addEdgeToCycle(g, getPrev(currentNode), currentNode);
+                currentNode = getPrev(currentNode);
             }
-            try {
-                Edge e = g.getEdgeFromNodes(getPrev(currentNode), currentNode);
-                negativeCycle.add(e);
-                totalNegativeCycleCosts += e.getCosts();
-                minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
-            } catch (EdgeNotFoundException edgeNotFoundException) {
-            }
+            addEdgeToCycle(g, getPrev(currentNode), currentNode);
         }
+    }
+
+    private void addEdgeToCycle(Graph g, Node a, Node b){
+        try {
+            Edge e = g.getEdgeFromNodes(a, b);
+            negativeCycle.add(e);
+            minNegativCylcleCapacity = Math.min(minNegativCylcleCapacity, e.getCapacity());
+        } catch(EdgeNotFoundException ex) {}
     }
 
     public double getDist(Node n) {
         return dist[n.getLabel()];
     }
 
-    public Node getMinDist(ArrayList<Node> unvisisted) throws ListIsEmptyException{
-        if(unvisisted.isEmpty()) {
-            throw new ListIsEmptyException();
-        }
-        int pos = 0;
-        Node min = unvisisted.get(0);
-        for(int i = 0; i < unvisisted.size(); i++) {
-            Node n = unvisisted.get(i);
-            if(getDist(min) > getDist(n)) {
-                min = n;
-                pos = i;
-            }
-        }
-        unvisisted.remove(pos);
-        return min;
-    }
 
     public double getMinNegativCylcleCapacity(){
         return minNegativCylcleCapacity;
